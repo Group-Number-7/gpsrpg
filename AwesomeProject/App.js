@@ -5,7 +5,7 @@ import Navigator from './src/navigation/Navigator'
 
 const App = () => {
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Navigator />
     </View>
   );
