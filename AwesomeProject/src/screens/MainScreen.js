@@ -7,27 +7,25 @@ import CustomMarker from '../components/CustomMarker';
 
 const {width, height} = Dimensions.get("window")
 
-import {distance_in_m} from '../helpers/helpers'
-
 export default MainScreen = () => {
     const [ pos, setPos ] = useState({lat: 0, lon: 0})
     const [enemies, setEnemies] = useState([]);
     const man = require("../assets/images/man.png");
     useEffect(()=>{
-        Geolocation.watchPosition(
+        const watch = Geolocation.watchPosition(
             ({coords})=>{
-                if(distance_in_m(coords.latitude, coords.longitude, pos.lat, pos.lon) > 1){
-                    console.log("new pos", coords);
-                    setPos({
-                        lat: coords.latitude,
-                        lon: coords.longitude
-                    });
-                }
+                console.log("new pos", coords);
+                setPos({
+                    lat: coords.latitude,
+                    lon: coords.longitude
+                });
             },
             (err)=>{
                 console.log(err.message)
-            }, { enableHighAccuracy: true, maximumAge: 0, distanceFilter: 5, interval: 500, fastestInterval: 500 })
-    })
+            }, { enableHighAccuracy: true, maximumAge: 500, distanceFilter: 5, interval: 3000, fastestInterval: 3000 }
+        )
+        return ()=> Geolocation.clearWatch(watch)
+    },[])
 
     const onPress = (e) => {
         setEnemies([
@@ -37,12 +35,14 @@ export default MainScreen = () => {
     }
     return(
         <View style={styles.mainView}>
-            <MapComponent pos={pos} press={onPress}>
-                {
-                    enemies.map((enemy)=><CustomMarker coord={enemy} key={enemy.latitude * enemy.longitude}/>)
-                }
-                <CustomMarker coord={{latitude: pos.lat, longitude: pos.lon}} source={man} />
-            </MapComponent>
+            {
+                <MapComponent pos={pos} press={onPress}>
+                    {
+                        enemies.map((enemy)=><CustomMarker coord={enemy} key={enemy.latitude * enemy.longitude}/>)
+                    }
+                    <CustomMarker coord={{latitude: pos.lat, longitude: pos.lon}} source={man} />
+                </MapComponent>
+            }
             <View style={{position: "absolute", top: Platform.OS === "ios" ? 60 : 10, height: 70, width: "100%", backgroundColor: "grey"}}>
 
             </View>
