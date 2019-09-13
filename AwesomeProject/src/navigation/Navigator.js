@@ -1,18 +1,44 @@
 import React from 'react'
+import {Animated, Easing} from 'react-native'
 import { createStackNavigator, createAppContainer, createSwitchNavigator } from 'react-navigation'
 
 import MainScreen from '../screens/MainScreen';
 import LandingScreen from '../screens/Landing';
+import InventoryScreen from '../screens/InventoryScreen';
+
+const transitionConfig = () => {
+    return {
+      transitionSpec: {
+        duration: 200,
+        easing: Easing.out(Easing.linear),
+        timing: Animated.timing,
+        useNativeDriver: true,
+      },
+      screenInterpolator: sceneProps => {      
+        const { position, scene } = sceneProps
+        const thisSceneIndex = scene.index
+        const fade = position.interpolate({
+            inputRange: [thisSceneIndex - 1, thisSceneIndex],
+            outputRange:[0,1]
+        })
+        return { opacity: fade }
+      },
+    }
+  }
 
 const AppStack = createStackNavigator({
-    Main: MainScreen
+    Main: MainScreen,
+    Inventory: InventoryScreen
 }, {
     initialRouteName: "Main",
-    headerMode: "none"
+    headerMode: "none",
+    transitionConfig: transitionConfig
 })
 
 const LandingStack = createStackNavigator({
     Landing: LandingScreen
+}, {
+    headerMode: "none"
 })
 
 export default Navigator = createAppContainer(createSwitchNavigator({
