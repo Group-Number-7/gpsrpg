@@ -62,6 +62,8 @@ export default MapComponent = React.memo(({pos, children, press, onReady}) => {
 const styles = StyleSheet.create({
     map: {
       height: "100%",
-      width: "100%"
+      width: "100%",
+      position: "absolute",
+      top: -height*.125
     }
 });

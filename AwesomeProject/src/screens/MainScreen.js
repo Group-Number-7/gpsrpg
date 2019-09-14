@@ -36,11 +36,10 @@ export default MainScreen = ({navigation}) => {
 
     useEffect(()=>{
         if(ready)
-            Axios.get(`${constants.server_add}/location/${pos.lat}/${pos.lon}`)
+            Axios.get(`${constants.server_add}/location/enemies/${pos.lat}/${pos.lon}/${10}`)
                 .then(({data})=>{
                     console.log(data)
                     setEnemies([
-                        ...enemies,
                         ...data
                     ])
                 }).catch((err)=>{
@@ -48,29 +47,22 @@ export default MainScreen = ({navigation}) => {
                 })
     },[pos])
 
-    const onPress = (e) => {
-        console.log("coord", e.nativeEvent.coordinate)
-        setEnemies([
-            ...enemies,
-            e.nativeEvent.coordinate
-        ]);
-    }
     return(
         <View style={styles.mainView}>
             {
-                <MapComponent pos={pos} press={onPress} onReady={()=>{setReady(true); console.log("raedy")}}>
+                <MapComponent pos={pos} onReady={()=>{setReady(true); console.log("raedy")}}>
                     {
-                        enemies.map((enemy)=><CustomMarker coord={enemy} key={enemy.latitude * enemy.longitude}/>)
+                        enemies.map((enemy)=><CustomMarker coord={enemy.location} key={enemy.location.latitude * enemy.location.longitude}/>)
                     }
                     <CustomMarker coord={{latitude: pos.lat, longitude: pos.lon}} source={man} />
                 </MapComponent>
             }
-            <View style={{position: "absolute", top: Platform.OS === "ios" ? 40 : 20, height: 80, width: "100%", justifyContent: "center", alignItems: "center", flexDirection: "row"}}>
+            <View style={{position: "absolute", top: Platform.OS === "ios" ? 40 : 20, height: 80, width: "100%", justifyContent: "center", alignItems: "center", flexDirection: "row", backgroundColor: "grey"}}>
                 <View style={{width: width / 3, height: 20, backgroundColor: "blue"}}></View>
                     <Image source={man} style={{height:80, width: 50, margin: 10}} resizeMode={"contain"} />
                 <View style={{width: width / 3, height: 20, backgroundColor: "red"}}></View>
             </View>
-            <View style={{position: "absolute", bottom: Platform.OS === "ios" ? "25%" : "22%", height: 100, width: "100%", justifyContent: "center", alignItems: "center"}}>
+            <View style={{position: "absolute", bottom: Platform.OS === "ios" ? 40 : 180, height: 100, width: "100%", justifyContent: "center", alignItems: "center", backgroundColor: "grey"}}>
                 <TouchableImage src={inv} style={{height: "100%", width: "30%"}} onPress={()=>navigation.navigate("Inventory")}/>
             </View>
         </View>
