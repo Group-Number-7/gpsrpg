@@ -1,17 +1,20 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { View, TouchableWithoutFeedback, Image, StyleSheet, Dimensions, Platform } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, Image, StyleSheet, Dimensions, Platform } from 'react-native'
+import Axios from 'axios';
 
 import Geolocation from 'react-native-geolocation-service';
 import MapComponent from '../components/MapComponent';
 import CustomMarker from '../components/CustomMarker';
 
 import TouchableImage from '../components/TouchableImage';
+import constants from '../config/constants';
 
 const {width, height} = Dimensions.get("window")
 
 export default MainScreen = ({navigation}) => {
     const [ pos, setPos ] = useState({lat: 0, lon: 0})
     const [enemies, setEnemies] = useState([]);
+    const [ready, setReady] = useState(false);
     const man = require("../assets/images/man.png");
     const inv = require("../assets/images/inventory.png");
 
@@ -31,7 +34,22 @@ export default MainScreen = ({navigation}) => {
         return ()=> Geolocation.clearWatch(watch)
     },[])
 
+    useEffect(()=>{
+        if(ready)
+            Axios.get(`${constants.server_add}/location/${pos.lat}/${pos.lon}`)
+                .then(({data})=>{
+                    console.log(data)
+                    setEnemies([
+                        ...enemies,
+                        ...data
+                    ])
+                }).catch((err)=>{
+                    console.log(err);
+                })
+    },[pos])
+
     const onPress = (e) => {
+        console.log("coord", e.nativeEvent.coordinate)
         setEnemies([
             ...enemies,
             e.nativeEvent.coordinate
@@ -40,7 +58,7 @@ export default MainScreen = ({navigation}) => {
     return(
         <View style={styles.mainView}>
             {
-                <MapComponent pos={pos} press={onPress}>
+                <MapComponent pos={pos} press={onPress} onReady={()=>{setReady(true); console.log("raedy")}}>
                     {
                         enemies.map((enemy)=><CustomMarker coord={enemy} key={enemy.latitude * enemy.longitude}/>)
                     }
