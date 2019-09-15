@@ -1,5 +1,5 @@
 import React, { useEffect }  from 'react'
-import { PermissionsAndroid, View, Platform } from 'react-native'
+import { PermissionsAndroid, View, Platform, Text } from 'react-native'
 import Geolocation from 'react-native-geolocation-service';
 
 export default LandingScreen = ({navigation}) => {
@@ -32,6 +32,8 @@ export default LandingScreen = ({navigation}) => {
       }, [])
 
       return(
-          <View></View>
+          <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+              <Text>loading app...</Text>
+          </View>
       )
     }

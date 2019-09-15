@@ -4,15 +4,7 @@ import Axios from 'axios';
 import constants from '../config/constants';
 
 export default function InventoryScreen({navigation}){
-    const [t, setT] = useState(`${constants.server_add} no data`);
-
-    useEffect(()=>{
-        console.log(`${constants.server_add}/`);
-        Axios.get(`${constants.server_add}/users`).then(({data})=>{
-            if(data)    
-                setT(data.ok ? "true" : "false")
-        }).catch((err)=>setT(`${constants.server_add} ${err}`))
-    })
+    const [t, setT] = useState(`${constants.server_add} no data`)
     return(
         <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
             <Text>

@@ -11,7 +11,7 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.003;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-export default MapComponent = React.memo(({pos, children, press, onReady}) => {
+export default MapComponent = React.memo(({pos, children, onReady}) => {
 
     const mapRef = useRef();
 
@@ -34,7 +34,6 @@ export default MapComponent = React.memo(({pos, children, press, onReady}) => {
     return (
         <MapView   
             ref={mapRef}
-            onPress={(e)=>{press(e)}}
             onLayout={onReady}
             provider={PROVIDER_GOOGLE}
             style={styles.map}
