@@ -1,8 +1,9 @@
 import React, { useEffect }  from 'react'
 import { PermissionsAndroid, View, Platform, Text } from 'react-native'
-import Geolocation from 'react-native-geolocation-service';
 
+import { useStateValue } from '../context/Context'
 export default LandingScreen = ({navigation}) => {
+    const [state, dispatch] = useStateValue();
     useEffect(()=>{
         requestPerm = async () =>{
             try {
@@ -15,12 +16,7 @@ export default LandingScreen = ({navigation}) => {
             )
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log("You can use the location", granted)
-                Geolocation.getCurrentPosition(({coords})=>{
-                    console.log("initial coords", coords)
-                    navigation.navigate("App")
-                }, (err)=>{
-                    console.log(err);
-                }, {timeout: 10000, enableHighAccuracy: true, maximumAge: 0})
+                navigation.navigate("App")
             } else {
                 console.log("location permission denied")
             }

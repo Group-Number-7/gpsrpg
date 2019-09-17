@@ -3,7 +3,10 @@ import React, {createContext, useContext, useReducer} from 'react';
 export const StateContext = createContext();
 
 const initialState = {
-    test: "no context",
+    pos: {
+        latitude: 0,
+        longitude: 0,
+    },
     stats: {
         hp: 100,
         def: 100,
@@ -14,7 +17,7 @@ const initialState = {
     currentStats: {
         hp: 50,
         def: 100,
-        mana: 60,
+        mana: 80,
         mag: 100,
         res: 100
     },

@@ -1,9 +1,9 @@
 export default reducer = (state, action) => {
     switch (action.type) {
-      case 'test':
+      case 'pos':
         return {
           ...state,
-          test: "testing complete"
+          pos: action.value
         };
       default:
         return state;
