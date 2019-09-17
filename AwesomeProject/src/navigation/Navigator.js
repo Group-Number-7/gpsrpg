@@ -9,8 +9,8 @@ import InventoryScreen from '../screens/InventoryScreen';
 const transitionConfig = () => {
     return {
       transitionSpec: {
-        duration: 200,
-        easing: Easing.out(Easing.linear),
+        duration: 500,
+        easing: Easing.out(Easing.poly(4)),
         timing: Animated.timing,
         useNativeDriver: true,
       },
@@ -18,8 +18,8 @@ const transitionConfig = () => {
         const { position, scene } = sceneProps
         const thisSceneIndex = scene.index
         const fade = position.interpolate({
-            inputRange: [thisSceneIndex - 1, thisSceneIndex],
-            outputRange:[0,1]
+            inputRange: [thisSceneIndex-1, thisSceneIndex],
+            outputRange:[0, 1]
         })
         return { opacity: fade }
       },
@@ -32,7 +32,7 @@ const AppStack = createStackNavigator({
 }, {
     initialRouteName: "Main",
     headerMode: "none",
-    transitionConfig: transitionConfig
+    transitionConfig: transitionConfig,
 })
 
 const LandingStack = createStackNavigator({
@@ -42,8 +42,8 @@ const LandingStack = createStackNavigator({
 })
 
 export default Navigator = createAppContainer(createSwitchNavigator({
-    Landing: LandingStack,
-    App: AppStack
-    }, {
-        initialRouteName: "Landing"
-    }));
+  Landing: LandingStack,
+  App: AppStack
+}, {
+  initialRouteName: "Landing"
+}));

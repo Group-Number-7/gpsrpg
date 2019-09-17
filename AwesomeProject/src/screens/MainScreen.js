@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { View, Image, StyleSheet, Text } from 'react-native'
 import Axios from 'axios';
 
@@ -14,22 +14,34 @@ import {useStateValue} from '../context/Context';
 export default MainScreen = React.memo(({navigation}) => {
     const [{pos},] = useStateValue();
     const [enemies, setEnemies] = useState([]);
+    const savedEnemies = useRef([])
     const [ready, setReady] = useState(false);
     const man = require("../assets/images/man.png");
     const inv = require("../assets/images/inventory.png");
     const [{stats, currentStats, level, exp, expToNextLevel}, dispatch] = useStateValue();
 
-    useEffect(()=>{
-        if(ready)
+    const getEnemies = () => {
+        if(ready){
+            console.log("getting enemies")
             Axios.get(`${constants.server_add}/location/enemies/${pos.latitude}/${pos.longitude}/${10}`)
-                .then(({data})=>{
-                    setEnemies([
-                        ...data
-                    ])
-                }).catch((err)=>{
-                    console.log(err);
-                })
-    },[pos])
+            .then(({data})=>{
+                console.log("new enemies: ", enemies)
+                setEnemies([
+                    ...data
+                ])
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }
+    }
+    useEffect(()=>{
+        if(savedEnemies.current.length > 1) setEnemies(savedEnemies.current)
+        else getEnemies()
+        return () => savedEnemies.current = enemies
+    }, [])
+    useEffect(()=>{
+        getEnemies()
+    },[pos, ready])
 
     const HeaderInfo = () => {
         return(

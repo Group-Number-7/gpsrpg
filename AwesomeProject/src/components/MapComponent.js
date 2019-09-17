@@ -1,18 +1,12 @@
 import React, {useState, useRef, useEffect} from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
-import MapView, { PROVIDER_GOOGLE, AnimatedRegion, MapViewAnimated } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 import MapStyle from '../assets/mapStyle.json'
 
 import { useStateValue } from '../context/Context';
-import {useDimensions} from '../hooks/useDimensions';
 
 export default MapComponent = (({children, onReady}) => {
-
-    const {width, height} = useDimensions();
-    const ASPECT_RATIO = width / height;
-    const LATITUDE_DELTA = 0.003;
-    const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
     const mapRef = useRef();
     const [{pos},] = useStateValue();
