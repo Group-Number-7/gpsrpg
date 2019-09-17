@@ -4,40 +4,49 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 import MapStyle from '../assets/mapStyle.json'
 
-import { distance_in_m } from '../helpers/helpers'
+import { useStateValue } from '../context/Context';
 
-const { width, height } = Dimensions.get('window');
-const ASPECT_RATIO = width / height;
-const LATITUDE_DELTA = 0.003;
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-
-export default MapComponent = React.memo(({pos, children, press}) => {
+export default MapComponent = (({children, onReady}) => {
 
     const mapRef = useRef();
-
-    const [region, setRegion] = useState({
-        latitude: pos.lat,
-        longitude: pos.lon,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-    })
+    const [{pos},] = useStateValue();
+    const [camera, setCamera] = useState()
 
     useEffect(()=>{
-        setRegion({
-            latitude: pos.lat,
-            longitude: pos.lon,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA, 
+        setCamera({
+            center: {
+               latitude: pos.latitude,
+               longitude: pos.longitude,
+           },
+            pitch: 0,
+            heading: 0,    
+            altitude: pos.altitude,    
+           zoom: 18
         })
-    },[pos])
+    }, [])
 
-    return (
-        <MapView   
+    useEffect(()=>{
+        var camera = {
+            center: {
+               latitude: pos.latitude,
+               longitude: pos.longitude,
+            },
+           pitch: 0,
+           altitude: pos.altitude,
+           heading: 0,
+           zoom: 18 
+        }
+        if(mapRef.current)  
+            mapRef.current.animateCamera(camera, {duration: 500})
+    }, [pos])
+
+    return camera ? (
+        <MapView
             ref={mapRef}
-            onPress={(e)=>{press(e)}}
+            onLayout={onReady}
+            camera={camera}
             provider={PROVIDER_GOOGLE}
             style={styles.map}
-            region={region}
             moveOnMarkerPress={false}
             customMapStyle={MapStyle}
             showsCompass={false}
@@ -55,12 +64,13 @@ export default MapComponent = React.memo(({pos, children, press}) => {
         >
             {children}
         </MapView>
-    )
+    ) : null
 })
 
+const height = Dimensions.get("window").height
 const styles = StyleSheet.create({
     map: {
-      height: "100%",
-      width: "100%"
+      ...StyleSheet.absoluteFillObject,
+      top: -height*.125,
     }
 });
