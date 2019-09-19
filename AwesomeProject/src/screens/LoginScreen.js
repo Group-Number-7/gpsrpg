@@ -6,34 +6,20 @@ import auth from '@react-native-firebase/auth';
 
 export default LoginScreen = ({navigation}) => {
 
-  const [initilizing, setInitilizing] = useState(true);
-  const [user, setUser] = useState();
- 
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user)
-
-    if (initilizing) setInitilizing(false);
-  }
+  const [,dispatch] = useStateValue();
  
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
+      auth().signInAnonymously().then((user)=>{
+        console.log("user signed in" , user);
+        dispatch({type: "login"})
+      }).then(()=>{
+        navigation.navigate("App")
+      })
   }, []);
  
-  if (initilizing) return null;
- 
-  if (!user) {
-    return (
-      <View>
-        <Text>Login</Text>
-      </View>
-    );
-  }
- 
   return (
-    <View>
-      <Text>Welcome {user.email}</Text>
+    <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+      <Text>logging in...</Text>
     </View>
   );
 }
