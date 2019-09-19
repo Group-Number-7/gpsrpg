@@ -5,6 +5,16 @@ export default reducer = (state, action) => {
           ...state,
           pos: action.value
         };
+      case 'logout':
+        return {
+          ...state,
+          loggedIn: false
+        }
+      case 'login':
+        return{
+          ...state,
+          loggedIn: true
+        }
       default:
         return state;
     }

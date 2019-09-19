@@ -23,7 +23,8 @@ const initialState = {
     },
     level: 1,
     exp: 0,
-    expToNextLevel: 100
+    expToNextLevel: 100,
+    loggedIn: false
 }
 export const StateProvider = ({reducer, children}) =>(
     <StateContext.Provider value={useReducer(reducer, initialState)}>

@@ -43,6 +43,10 @@ export default MainScreen = React.memo(({navigation}) => {
         getEnemies()
     },[pos, ready])
 
+    useEffect(()=>{
+        console.log("render mainscreen")
+    })
+
     const HeaderInfo = () => {
         return(
             <View style={styles.headerContainer}>

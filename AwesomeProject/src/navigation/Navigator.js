@@ -5,11 +5,13 @@ import { createStackNavigator, createAppContainer, createSwitchNavigator } from 
 import MainScreen from '../screens/MainScreen';
 import LandingScreen from '../screens/Landing';
 import InventoryScreen from '../screens/InventoryScreen';
+import LoginScreen from '../screens/LoginScreen';
+import AppContainer from '../components/AppContainer';
 
 const transitionConfig = () => {
     return {
       transitionSpec: {
-        duration: 500,
+        duration: 300,
         easing: Easing.out(Easing.poly(4)),
         timing: Animated.timing,
         useNativeDriver: true,
@@ -26,13 +28,20 @@ const transitionConfig = () => {
     }
   }
 
-const AppStack = createStackNavigator({
+export const AppNav = createAppContainer(createStackNavigator({
     Main: MainScreen,
     Inventory: InventoryScreen
 }, {
     initialRouteName: "Main",
     headerMode: "none",
     transitionConfig: transitionConfig,
+}))
+
+const AppStack = createStackNavigator({
+  Container: AppContainer
+}, {
+  initialRouteName: "Container",
+  headerMode: "none"
 })
 
 const LandingStack = createStackNavigator({
@@ -41,9 +50,17 @@ const LandingStack = createStackNavigator({
     headerMode: "none"
 })
 
+const AuthStack = createStackNavigator({
+  Login: LoginScreen
+}, {
+  initialRouteName: "Login",
+  headerMode: "none"
+})
+
 export default Navigator = createAppContainer(createSwitchNavigator({
   Landing: LandingStack,
-  App: AppStack
+  App: AppStack,
+  Auth: AuthStack
 }, {
-  initialRouteName: "Landing"
+  initialRouteName: "Auth"
 }));

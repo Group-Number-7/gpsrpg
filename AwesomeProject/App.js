@@ -1,15 +1,15 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 
 import Reducer from './src/context/Reducer'
 import {StateProvider} from './src/context/Context'
-import AppContainer from './src/components/AppContainer'
+import Navigator from './src/navigation/Navigator'
 
 const App = () => {
   return (
     <View style={{flex: 1}}>
       <StateProvider reducer={Reducer}>
-        <AppContainer />
+        <Navigator />
       </StateProvider>
     </View>
   );
