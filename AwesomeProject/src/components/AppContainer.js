@@ -1,16 +1,17 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Geolocation from 'react-native-geolocation-service';
 import { View, Text } from 'react-native'
 
-import { AppNav } from '../navigation/Navigator'
+import AppNav from '../navigation/AppNav'
 import { useStateValue } from '../context/Context'
+import auth from '@react-native-firebase/auth'
 
 export default ({navigation}) => {
     const [{loggedIn},dispatch] = useStateValue()
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
-        watch = Geolocation.watchPosition(
+        var watch = Geolocation.watchPosition(
             ({coords})=>{
                 dispatch({
                     type:"pos",
@@ -28,11 +29,16 @@ export default ({navigation}) => {
 
     useEffect(()=>{
         if(!loggedIn){
-            navigation.navigate("Auth")
+            auth().signOut().then(()=>{
+                navigation.navigate("Auth")
+            })
         }
     },[loggedIn])
 
-    return ready ? (
-        <AppNav />
-    ) : <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}><Text>getting location data</Text></View>
+    return ready ?
+        (<AppNav />)
+        : 
+        <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+            <Text>getting location data</Text>
+        </View>
 }

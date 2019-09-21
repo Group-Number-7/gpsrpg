@@ -12,5 +12,5 @@ New Change:
     Must use Yarn to install packages, since firebase doesn't work well with npm.
     Steps to use yarn:
         1) install yarn from their website
-        2) in project, delete node modules folder and package-lock.json (not package.json)
+        2) in project, delete node_modules folder and package-lock.json (not package.json)
         3) run "yarn" in the terminal
