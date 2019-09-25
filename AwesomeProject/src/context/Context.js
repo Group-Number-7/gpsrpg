@@ -17,14 +17,15 @@ const initialState = {
     currentStats: {
         hp: 50,
         def: 100,
-        mana: 80,
+        mana: 30,
         mag: 100,
         res: 100
     },
     level: 1,
-    exp: 0,
+    exp: 10,
     expToNextLevel: 100,
-    loggedIn: false
+    loggedIn: false,
+    userName: "billybobjonameislong243"
 }
 export const StateProvider = ({reducer, children}) =>(
     <StateContext.Provider value={useReducer(reducer, initialState)}>
