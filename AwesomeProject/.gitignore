@@ -59,4 +59,7 @@ buck-out/
 /ios/Pods/
 ios/AwesomeProject/AppDelegate.m
 android/app/src/main/AndroidManifest.xml
+android/app/google-services.json
 !android/app/debug.keystore
+/ios/GoogleService-Info.plist
+ios/Resources/GoogleService-Info.plist
