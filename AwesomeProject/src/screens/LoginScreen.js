@@ -13,7 +13,6 @@ export default LoginScreen = ({navigation}) => {
  
     useEffect(() => {
         const onAuthStateChanged = (user) => {
-            console.log("user", user);
             if(user){
                 dispatch({type: "login"})
                 navigation.navigate("Landing")
@@ -58,7 +57,9 @@ export default LoginScreen = ({navigation}) => {
         <TouchableOpacity onPress={handlePress} style={{height: 100, width: "80%", justifyContent: "center", alignItems: "center", backgroundColor: "grey"}}>
             <Text>Login</Text>
         </TouchableOpacity>
-      <Text>logging in...</Text>
+        <TouchableOpacity onPress={()=>navigation.navigate("Signup")} style={{justifyContent: "center", alignItems: "center", marginTop: 10}}>
+            <Text>No account?</Text>
+        </TouchableOpacity>
     </View>
   );
 }
