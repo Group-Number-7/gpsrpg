@@ -23,7 +23,7 @@ export default LandingScreen = ({navigation}) => {
     }
 
     useEffect(()=>{
-        reqPerm()
+        Platform.OS === "android" ? reqPerm() : navigation.navigate("App");
       }, [])
 
       return(

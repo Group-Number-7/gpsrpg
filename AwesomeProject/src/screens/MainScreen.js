@@ -12,13 +12,13 @@ import ProgressBar from '../components/ProgressBar';
 import {useStateValue} from '../context/Context';
 
 export default MainScreen = React.memo(({navigation}) => {
-    const [{pos},] = useStateValue();
     const [enemies, setEnemies] = useState([]);
     const savedEnemies = useRef([])
     const [ready, setReady] = useState(false);
     const man = require("../assets/images/man.png");
     const inv = require("../assets/images/inventory.png");
-    const [{stats, currentStats, level, exp, expToNextLevel}, dispatch] = useStateValue();
+    const ham = require("../assets/images/hamburger.png");
+    const [{pos, userName, stats, currentStats, level, exp, expToNextLevel}, dispatch] = useStateValue();
 
     const getEnemies = () => {
         if(ready){
@@ -43,29 +43,32 @@ export default MainScreen = React.memo(({navigation}) => {
         getEnemies()
     },[pos, ready])
 
-    useEffect(()=>{
-        console.log("render mainscreen")
-    })
-
     const HeaderInfo = () => {
         return(
             <View style={styles.headerContainer}>
                 <View style={styles.topContainer}>
-                    <View style={styles.barContainer}>
-                        <Text>{currentStats.hp}/{stats.hp} hp</Text>
-                        <ProgressBar containerStyle={{height: 20, width: "100%"}} curr={currentStats.hp} max={stats.hp} color="red"/>
+                    <View style={styles.charContainer}>
+                        <Text style={{flex: .25, width: "100%", textAlign: "center"}} numberOfLines={1}>{userName}</Text>
+                        <Image source={man} style={{flex: .75, width: 50, margin: 10}} resizeMode="center" />
                     </View>
-                    <View style={styles.barContainer}>
-                        <Image source={man} style={{height:80, width: 50, margin: 10}} />
-                    </View>
-                    <View style={styles.barContainer}>
-                        <Text>{currentStats.mana}/{stats.mana} mana</Text>
-                        <ProgressBar containerStyle={{height: 20, width: "100%"}} curr={currentStats.mana} max={stats.mana} color="blue"/>
+                    <View style={{flex: 4, padding: 5, height: "100%", justifyContent: "flex-end"}}>
+                        <Text style={{width: "100%", textAlign: "center", flex: 1, fontSize: 18}}>Level {level}</Text>
+                        <View style={styles.barContainer}>
+                            <ProgressBar containerStyle={{height: 25, width: "100%"}} curr={currentStats.hp} max={stats.hp} color="rgba(255,0,0,.8)">
+                                <Text style={{color: "black"}}>{currentStats.hp}/{stats.hp} hp</Text>
+                            </ProgressBar>
+                        </View>
+                        <View style={styles.barContainer}>
+                            <ProgressBar containerStyle={{height: 25, width: "100%"}} curr={currentStats.mana} max={stats.mana} color="rgba(50,50,255,.8)">
+                                <Text style={{color: "black"}}>{currentStats.mana}/{stats.mana} mana</Text>
+                            </ProgressBar>
+                        </View>
                     </View>
                 </View>
                 <View style={styles.xpContainer}>
-                    <Text style={{width: "100%", textAlign: "left", paddingLeft: 5}}>{String(exp)}/{expToNextLevel} xp to level {level+1}</Text>
-                    <ProgressBar containerStyle={{height: 20, width: "100%"}} curr={exp} max={expToNextLevel} color="green"/>
+                    <ProgressBar containerStyle={{height: 25, width: "100%"}} curr={exp} max={expToNextLevel} color="rgba(50,255,50,.8)">
+                        <Text style={{color: "black"}}>{String(exp)}/{expToNextLevel} xp</Text>
+                    </ProgressBar>
                 </View>
             </View>
         )
@@ -83,9 +86,10 @@ export default MainScreen = React.memo(({navigation}) => {
                 </MapComponent>
             }   
             <HeaderInfo />
-            <View style={styles.inventoryContainer}>
-                <TouchableImage src={inv} style={{height: 100, width: "30%"}} onPress={()=>navigation.navigate("Inventory")}/>
-            </View> 
+            <View style={styles.bottomMenu}>
+                    <TouchableImage src={inv} style={{height: 80, width: "30%"}} onPress={()=>navigation.navigate("Inventory")}/>
+                    <TouchableImage src={ham} style={{height: 50, width: "30%"}} imgStyle={{tintColor: "rgba(1,1,1,.7)"}} onPress={()=>navigation.navigate("Inventory")}/>
+            </View>
         </View>
     )
 })
@@ -99,38 +103,51 @@ const styles = StyleSheet.create({
     },
     headerContainer:{
         position:"absolute",
-        top: 20,
-        height: 110, 
-        width: "100%", 
-        justifyContent: "center", 
-        alignItems: "center", 
-        paddingHorizontal: 10
+        top: 0,
+        left: 0,
+        height: 140, 
+        width: "100%",
+        borderBottomWidth: 2,
+        borderBottomColor: "black",
     },
     topContainer: {
         flex: .8, 
         width: "100%", 
         justifyContent: "center",
         alignItems: "center",
-        flexDirection: "row"
+        flexDirection: "row",
     },
-    barContainer:{
-        flex: 1, 
+    charContainer:{
+        flex: 1.5, 
         height: "100%", 
         justifyContent: "center", 
         alignItems: "center", 
-        flexDirection:"column"
+        flexDirection:"column",
+        borderBottomColor: "black",
+        borderRightColor: "black",
+        borderRightWidth: 2,
+        borderBottomWidth: 2
     },
+    barContainer: {
+        flex: 1,
+        width: "100%",
+        justifyContent: "flex-end"
+    },  
     xpContainer:{
         flex: .2, 
         width: "100%", 
         justifyContent: "flex-end",
-        alignItems: "center"
-    },
-    inventoryContainer:{
-        position:"absolute",
-        bottom: "25%",
-        width: "100%", 
-        justifyContent: "flex-start", 
         alignItems: "center",
-    }
+        paddingHorizontal: 5,
+        marginTop: 5,
+        marginBottom: 5,
+    },
+    bottomMenu:{
+        position:"absolute",
+        bottom: "22%",
+        width: "100%", 
+        justifyContent: "space-between", 
+        alignItems: "center",
+        flexDirection: "row"
+    },
 })
