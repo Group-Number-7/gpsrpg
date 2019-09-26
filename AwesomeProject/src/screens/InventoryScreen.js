@@ -1,41 +1,71 @@
 import React, {useEffect, useState} from 'react'
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native'
+import {View, Text, Dimensions, TouchableOpacity, StyleSheet, TextInput, KeyboardAvoidingView, FlatList} from 'react-native'
 import Axios from 'axios';
 import constants from '../config/constants';
 import {useStateValue } from '../context/Context';
 
-export default  React.memo(InventoryScreen = ({navigation}) => {
+const {height} = Dimensions.get("screen").height;
+
+export default  InventoryScreen = ({navigation}) => {
     const [,dispatch] = useStateValue();
+    const [filter, setFilter] = useState("")
 
     const [loaded, setLoaded] = useState(false)
+    const [data, setData] = useState([1,2,3,4])
 
     useEffect(()=>{
         setLoaded(true)
+        var d = data
+        if(d.length % 3 >= 1) d.push(0)
+        if(d.length % 3 >= 1) d.push(0)
+        setData(d);
     }, [])
 
+    const renderItem = ({ item }) => {
+        return(
+            <View style={{flex: 1, height: 100, margin: 3, borderColor: "red", borderWidth: 1}}>
+            { item > 0 && 
+                <Text>hello {item}</Text>
+            }
+            </View>
+        )       
+    }
+
     return loaded ? (
-        <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-            <Text>
-                Inventory
-            </Text>
-            <TouchableOpacity onPress={()=>dispatch({type:"logout"})}>
-                <Text>to landing</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.exit} onPress={()=>navigation.navigate("Main")}>
-                <Text>X</Text>
-            </TouchableOpacity>
-        </View>
+        <KeyboardAvoidingView style={styles.container} behavior="height">
+            <View style={{height: 50, width: "100%", borderColor: "black", borderWidth: 1, flexDirection: "row", justifyContent: "center", alignItems: "flex-start"}}>
+                <Text>icon</Text>
+                <TextInput style={{height: 50, flex: 1}} value={filter} placeholder="search" onChangeText={(e)=>setFilter(e)}/>
+                <Text>icon</Text>
+            </View>
+            <FlatList
+                data={data}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => String(index)}
+                style={{flex: 1, width: "100%"}}
+                numColumns={3}
+            />
+            <View style={{height: 50, width: "100%", flexDirection: "row"}}>
+                <TouchableOpacity onPress={()=>navigation.navigate("Main")} style={{flex: 1, borderColor: "red", borderWidth: 1, justifyContent: "center", alignItems: "center"}}>
+                    <Text>return</Text>
+                </TouchableOpacity>
+                <View style={{flex: 3, borderColor: "green", borderWidth: 1, justifyContent: "center", alignItems: "center"}}>
+                    <Text>gold</Text>
+                </View>
+                <View style={{flex: 2, borderColor: "blue", borderWidth: 1, justifyContent: "center", alignItems: "center"}}>
+                    <Text>items</Text>
+                </View>
+            </View>
+        </KeyboardAvoidingView>
     ) : 
     <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
         <Text>loading...</Text>
     </View>
-})
+}
 
 const styles = StyleSheet.create({
-    exit: {
-        position: "absolute", bottom: 50, 
-        width: 70, height: 70, 
-        justifyContent: "center", alignItems: "center", 
-        borderRadius: 35, borderWidth: 3, borderColor: "black"
+    container: {
+        flex: 1,
+        padding: 10
     }
 })
