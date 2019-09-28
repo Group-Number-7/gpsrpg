@@ -2,8 +2,9 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import {Animated, Easing} from 'react-native'
 
-import InventoryScreen from '../screens/InventoryScreen';
-import MainScreen from '../screens/MainScreen';
+import InventoryScreen from '../screens/InventoryScreen'
+import MainScreen from '../screens/MainScreen'
+import CharacterScreen from '../screens/CharacterScreen'
 
 const transitionConfig = () => {
     return {
@@ -27,7 +28,8 @@ const transitionConfig = () => {
 
 export default AppNav = createAppContainer(createStackNavigator({
     Main: MainScreen,
-    Inventory: InventoryScreen
+    Inventory: InventoryScreen,
+    Character: CharacterScreen
 }, {
     initialRouteName: "Main",
     headerMode: "none",
