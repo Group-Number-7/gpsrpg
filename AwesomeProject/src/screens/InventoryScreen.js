@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {View, Text, Dimensions, TouchableOpacity, StyleSheet, TextInput, KeyboardAvoidingView, FlatList} from 'react-native'
+import {View, Text, Dimensions, TouchableOpacity, StyleSheet, TextInput, KeyboardAvoidingView, FlatList, SafeAreaView} from 'react-native'
 import Axios from 'axios';
 import constants from '../config/constants';
 import {useStateValue } from '../context/Context';
@@ -33,10 +33,10 @@ export default  InventoryScreen = ({navigation}) => {
 
     return loaded ? (
         <KeyboardAvoidingView style={styles.container} behavior="height">
-            <View style={{height: 50, width: "100%", borderColor: "black", borderWidth: 1, flexDirection: "row", justifyContent: "center", alignItems: "flex-start"}}>
-                <Text>icon</Text>
-                <TextInput style={{height: 50, flex: 1}} value={filter} placeholder="search" onChangeText={(e)=>setFilter(e)}/>
-                <Text>icon</Text>
+            <View style={{height: 50, borderColor: "black", borderWidth: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", marginHorizontal: 10}}>
+                <Text style={{width: 40}}>icon</Text>
+                    <TextInput style={{flex: 1, backgroundColor: "green", borderLeftColor: "rgba(1,1,1,.8)", borderLeftWidth: 1}} value={filter} placeholder="search" onChangeText={(e)=>setFilter(e)}/>
+                <Text style={{width: 40}}>icon</Text>
             </View>
             <FlatList
                 data={data}
@@ -66,6 +66,6 @@ export default  InventoryScreen = ({navigation}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10
+        paddingVertical: 10
     }
 })
