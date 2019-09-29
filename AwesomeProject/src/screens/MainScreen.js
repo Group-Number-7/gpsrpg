@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { View, Image, StyleSheet, Text } from 'react-native'
+import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import Axios from 'axios';
 
 import MapComponent from '../components/MapComponent';
@@ -47,10 +47,10 @@ export default MainScreen = React.memo(({navigation}) => {
         return(
             <View style={styles.headerContainer}>
                 <View style={styles.topContainer}>
-                    <View style={styles.charContainer}>
+                    <TouchableOpacity style={styles.charContainer} onPress={()=>navigation.navigate("Profile")}>
                         <Text style={{flex: .25, width: "100%", textAlign: "center"}} numberOfLines={1}>{userName}</Text>
                         <Image source={man} style={{flex: .75, width: 50, margin: 10}} resizeMode="center" />
-                    </View>
+                    </TouchableOpacity>
                     <View style={{flex: 4, padding: 5, height: "100%", justifyContent: "flex-end"}}>
                         <Text style={{width: "100%", textAlign: "center", flex: 1, fontSize: 18}}>Level {level}</Text>
                         <View style={styles.barContainer}>
