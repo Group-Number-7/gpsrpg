@@ -15,4 +15,4 @@ New Change:
         2) in project, delete node_modules folder and package-lock.json (not package.json)
         3) run "yarn" in the terminal
         
-    With new Update, firebase is integrated with character creation, so you will need to be running the server in order to run it   correctyly ( I think itll run, it just wont load your character, may cause errors) I might add some checks in the app to just skip the login stuff while in dev mode, but for now logging in with the server is best
+With new Update, firebase is integrated with character creation, so you will need to be running the server in order to run it   correctyly ( I think itll run, it just wont load your character, may cause errors) I might add some checks in the app to just skip the login stuff while in dev mode, but for now logging in with the server is best
