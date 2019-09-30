@@ -63,3 +63,4 @@ android/app/google-services.json
 !android/app/debug.keystore
 /ios/GoogleService-Info.plist
 ios/Resources/GoogleService-Info.plist
+/google-services.json

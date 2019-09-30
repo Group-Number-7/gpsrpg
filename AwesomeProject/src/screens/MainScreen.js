@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import Axios from 'axios';
+import FastImage from 'react-native-fast-image'
 
 import MapComponent from '../components/MapComponent';
 import CustomMarker from '../components/CustomMarker';
@@ -10,14 +11,12 @@ import constants from '../config/constants';
 import ProgressBar from '../components/ProgressBar';
 
 import {useStateValue} from '../context/Context';
+import Images from '../assets/images'
 
-export default MainScreen = React.memo(({navigation}) => {
+export default MainScreen = ({navigation}) => {
     const [enemies, setEnemies] = useState([]);
     const savedEnemies = useRef([])
     const [ready, setReady] = useState(false);
-    const man = require("../assets/images/man.png");
-    const inv = require("../assets/images/inventory.png");
-    const ham = require("../assets/images/hamburger.png");
     const [{pos, userName, stats, currentStats, level, exp, expToNextLevel}, dispatch] = useStateValue();
 
     const getEnemies = () => {
@@ -49,7 +48,7 @@ export default MainScreen = React.memo(({navigation}) => {
                 <View style={styles.topContainer}>
                     <TouchableOpacity style={styles.charContainer} onPress={()=>navigation.navigate("Profile")}>
                         <Text style={{flex: .25, width: "100%", textAlign: "center"}} numberOfLines={1}>{userName}</Text>
-                        <Image source={man} style={{flex: .75, width: 50, margin: 10}} resizeMode="center" />
+                        <FastImage source={Images.man} style={{flex: .75, width: 50, margin: 10}} resizeMode="center"/>
                     </TouchableOpacity>
                     <View style={{flex: 4, padding: 5, height: "100%", justifyContent: "flex-end"}}>
                         <Text style={{width: "100%", textAlign: "center", flex: 1, fontSize: 18}}>Level {level}</Text>
@@ -73,6 +72,7 @@ export default MainScreen = React.memo(({navigation}) => {
             </View>
         )
     }
+
     return(
         <View style={styles.mainView}>
             {
@@ -82,17 +82,17 @@ export default MainScreen = React.memo(({navigation}) => {
                             return <CustomMarker coord={enemy.location} key={enemy.location.latitude * enemy.location.longitude}/>
                         })
                     }
-                    {pos && <CustomMarker coord={{latitude: pos.latitude, longitude: pos.longitude}} source={man} /> }
+                    {pos && <CustomMarker coord={{latitude: pos.latitude, longitude: pos.longitude}} source={Images.man} /> }
                 </MapComponent>
             }   
             <HeaderInfo />
             <View style={styles.bottomMenu}>
-                    <TouchableImage src={inv} style={{height: 80, width: "30%"}} onPress={()=>navigation.navigate("Inventory")}/>
-                    <TouchableImage src={ham} style={{height: 50, width: "30%"}} imgStyle={{tintColor: "rgba(1,1,1,.7)"}} onPress={()=>navigation.navigate("Inventory")}/>
+                    <TouchableImage src={Images.inventory} style={{height: 80, width: "30%"}} onPress={()=>navigation.navigate("Inventory")}/>
+                    <TouchableImage src={Images.hamburger} style={{height: 50, width: "30%"}} imgStyle={{tintColor: "rgba(1,1,1,.7)"}} onPress={()=>navigation.navigate("Inventory")}/>
             </View>
         </View>
     )
-})
+}
 
 const styles = StyleSheet.create({
     mainView:{
