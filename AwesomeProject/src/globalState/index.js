@@ -10,24 +10,26 @@ const initialState = {
         longitude: 0,
     },
     stats: {
-        hp: 100,
-        def: 100,
-        mana: 100,
-        mag: 100,
-        res: 100,
+        hp: 0,
+        def: 0,
+        mana: 0,
+        magic: 0,
+        res: 0,
+        attack: 0
     },
     currentStats: {
-        hp: 50,
-        def: 100,
-        mana: 30,
-        mag: 100,
-        res: 100
+        hp: 0,
+        def: 0,
+        mana: 0,
+        magic: 0,
+        res: 0,
+        attack: 0
     },
-    level: 1,
-    exp: 10,
-    expToNextLevel: 100,
+    level: 0,
+    exp: 0,
+    expToNextLevel: 0,
     loggedIn: false,
-    username: "test"
+    username: ""
 }
  
 const actions = {
@@ -36,25 +38,51 @@ const actions = {
   },
   logout: (store) => {
       auth().signOut()
-      store.setState({...store, loggedIn: false})
+      store.setState(initialState)
   },
-  login: (store, {email, fbUid}) => {
-      Axios.get(`${constants.server_add}/users/${fbUid}/${email}`)
+  login: (store, {email, nav}) => {
+      Axios.get(`${constants.server_add}/users/${email}`)
         .then(({data})=>{
-            console.log("data", data);
+            console.log("data", data)
+            if(data.status === 1){
+                store.setState({                    
+                    ...store, 
+                    loggedIn: true, 
+                    username: data.user.username,
+                    level: data.user.level,
+                    exp: data.user.experience,
+                    stats: data.user.stats,
+                    currentStats: data.user.stats, 
+                })
+                nav()
+            } else{
+                //TODO show error message, pop up or something
+                console.log("check internet connection")
+            }
         })
-
-      store.setState({...store, loggedIn: true})
   },
-  signup: (store, {email, fbUid, username}) => {
+  signup: (store, {email, username, nav}) => {
       Axios.post(`${constants.server_add}/users/signup`, {
           email: email,
-          fbUid: fbUid,
           username: username
       }).then(({data})=> {
           console.log("data", data)
+          if(data.status === 1){
+                store.setState({
+                    ...store, 
+                    loggedIn: true, 
+                    username: username,
+                    level: data.user.level,
+                    exp: data.user.experience,
+                    stats: data.user.stats,
+                    currentStats: data.user.stats
+                })
+                nav()
+            } else{
+                //TODO show error message, pop up or something
+                console.log("check internet connection")
+            }
       })
-      store.setState({...store, loggedIn: true, username: username})
   }
 };
  

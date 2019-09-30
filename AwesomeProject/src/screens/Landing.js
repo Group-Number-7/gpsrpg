@@ -1,31 +1,26 @@
-import React, { useEffect, useRef }  from 'react'
-import { PermissionsAndroid, View, Platform, Text } from 'react-native'
-import Axios from 'axios'
+import React, { useEffect }  from 'react'
+import { View, Text } from 'react-native'
+import auth from '@react-native-firebase/auth';
+
+import useGlobalState from '../globalState'
+import useInterval from '../hooks/useInterval'
 
 export default LandingScreen = ({navigation}) => {
-    const reqPerm = async () => {
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                {
-                'title': 'GPS-RPG',
-                'message': 'Needs to access your location '
-                }
-            )
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                console.log("You can use the location", granted)
-                navigation.navigate("App");
-            } else {
-                console.log("location permission denied")
+    const [{loggedIn},actions] = useGlobalState()
+    useEffect(() => {
+        const onAuthStateChanged = (user) => {
+            if(user){
+                console.log("user found")
+                actions.login({email: user._user.email, nav: ()=>navigation.navigate("App")})
             }
-        } catch (err) {
-            console.warn(err)
         }
-    }
-
-    useEffect(()=>{
-        Platform.OS === "android" ? reqPerm() : navigation.navigate("App");
-      }, [])
+        const timeout = setTimeout(()=>{if(!loggedIn) navigation.navigate("Auth")}, 2000);
+        const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+        return ()=> {
+            subscriber(); // unsubscribe on unmount
+            clearTimeout(timeout)
+        }
+    }, []);
 
       return(
           <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>

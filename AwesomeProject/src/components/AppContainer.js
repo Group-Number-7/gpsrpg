@@ -1,40 +1,64 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Geolocation from 'react-native-geolocation-service';
-import { View, Text } from 'react-native'
+import { View, Text, PermissionsAndroid } from 'react-native'
 
 import useGlobalState from '../globalState'
 import AppNav from '../navigation/AppNav'
-import auth from '@react-native-firebase/auth'
 
 export default AppContainer = React.memo(({navigation}) => {
     const [{loggedIn}, actions] = useGlobalState()
+    const [granted, setGranted] = useState(false)
     const [ready, setReady] = useState(false);
+    const watchRef = useRef();
+
+    const reqPerm = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                'title': 'GPS-RPG',
+                'message': 'Needs to access your location '
+                }
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log("You can use the location", granted)
+                setGranted(true)
+            } else {
+                console.log("location permission denied")
+            }
+        } catch (err) {
+            console.warn(err)
+        }
+    }
 
     useEffect(() => {
-        var watch = Geolocation.watchPosition(
-            ({coords})=>{
-                actions.setPos(coords)
-                if(!ready)
-                    setReady(true);
-            },
-            (err)=>{
-                console.log(err.message)
-            }, { enableHighAccuracy: true, maximumAge:1000, distanceFilter: 5, timeout:500, interval:500, fastestInterval:500 }
-        )
-        return () => Geolocation.clearWatch(watch)
+        if(Platform.OS === "android") reqPerm()
+        return () => Geolocation.clearWatch(watchRef.current)
     }, [])
 
     useEffect(()=>{
-        if(!loggedIn){
-            auth().signOut().then(()=>{
-                navigation.navigate("Auth")
-            })
+        if(granted){
+            watchRef.current = Geolocation.watchPosition(
+                ({coords})=>{
+                    actions.setPos(coords)
+                    if(!ready)
+                        setReady(true);
+                },
+                (err)=>{
+                    console.log(err.message)
+                }, { enableHighAccuracy: true, maximumAge:1000, distanceFilter: 5, timeout:500, interval:500, fastestInterval:500 }
+            )
         }
-    },[loggedIn])
+    },[granted])
+
+    useEffect(()=>{
+        if(!loggedIn)
+            navigation.navigate("Auth");
+    }, [loggedIn])
 
     return ready ?
-        (<AppNav />)
-        : 
+        <AppNav />
+            : 
         <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
             <Text>getting location data</Text>
         </View>

@@ -6,29 +6,17 @@ import auth from '@react-native-firebase/auth';
 
 export default LoginScreen = ({navigation}) => {
 
-    const [,actions] = useGlobalState();
+    const [{loggedIn}, actions] = useGlobalState();
     const [email, setEmail] = useState("")
     const [pass, setPass] = useState("")
     const [err, setErr] = useState("")
- 
-    useEffect(() => {
-        const onAuthStateChanged = (user) => {
-            if(user){
-                console.log("user", user);
-                actions.login({email: user._user.email, fbUid: user._user.uid})
-                navigation.navigate("Landing")
-            }
-        }
-        const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-        return subscriber; // unsubscribe on unmount
-    }, []);
 
     const handlePress = () => {
         if(email.length && pass.length){
+            console.log(email, pass, "test")
             auth().signInWithEmailAndPassword(email.trim(), pass).then((user)=>{
                 if(user){
-                    actions.login()
-                    navigation.navigate("Landing")
+                    actions.login({email: email, nav: ()=> navigation.navigate("App")})   
                 }
             }).catch((err)=>{
                 switch(err.code){
@@ -41,13 +29,22 @@ export default LoginScreen = ({navigation}) => {
                     case 'auth/user-not-found':
                         setErr("Account not found")
                         break;
+                    case 'auth/user-disabled':
+                        setErr("Account disabled")
+                        break;
                     default: 
+                        console.log("err", err.code);
                         setErr("Error logging in");
+                        return;
                 }
             })
         }
     }
- 
+    useEffect(()=>{
+        if(loggedIn)
+            navigation.navigate("App")
+    },[loggedIn])
+
   return (
     <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
         <Text style={{width: "100%", textAlign: "center", color: "red"}}>{err}</Text>

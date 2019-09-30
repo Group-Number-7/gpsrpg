@@ -32,5 +32,5 @@ export default Navigator = createAppContainer(createSwitchNavigator({
   App: AppStack,
   Auth: AuthStack
 }, {
-  initialRouteName: "Auth"
+  initialRouteName: "Landing"
 }));

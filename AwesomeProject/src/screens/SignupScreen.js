@@ -11,15 +11,16 @@ export default SignupScreen = ({navigation}) => {
   const [pass, setPass] = useState("");
   const [username, setUsername] = useState("");
   const [err, setErr] = useState("")
- 
+
   const handlePress = () => {
       if(email.length && pass.length && username.length){
         auth().createUserWithEmailAndPassword(email.trim(), pass).then((user)=>{
             if(user){
-                actions.signup({email: user.user.email, fbUid: user.user.uid, username: username})
-                navigation.navigate("Landing");
+                console.log("user created")
+                actions.signup({email: user.user.email, username: username, nav: ()=>navigation.navigate("App")})
             }
         }).catch((err)=>{
+            console.log("err", err.code)
             switch(err.code){
                 case 'auth/invalid-email':
                     setErr("Invalid Email");
@@ -29,6 +30,7 @@ export default SignupScreen = ({navigation}) => {
                     break;
                 case 'auth/email-already-in-use':
                     setErr("Email already in use");
+                    break;
                 default:
                     setErr("Error signing up");
                     return;
