@@ -1,5 +1,6 @@
 import React, { useEffect, useRef }  from 'react'
 import { PermissionsAndroid, View, Platform, Text } from 'react-native'
+import Axios from 'axios'
 
 export default LandingScreen = ({navigation}) => {
     const reqPerm = async () => {

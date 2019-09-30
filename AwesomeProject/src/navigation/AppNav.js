@@ -9,6 +9,7 @@ import CustomTabBar from './CustomTabBar'
 import InventoryScreen from '../screens/InventoryScreen'
 import MainScreen from '../screens/MainScreen'
 import CharacterScreen from '../screens/CharacterScreen'
+import MenuScreen from '../screens/MenuScreen'
 
 const transitionConfig = () => {
     return {
@@ -33,7 +34,7 @@ const transitionConfig = () => {
 const profileStack = createMaterialTopTabNavigator({
     Character: CharacterScreen,
     Stats: InventoryScreen,
-    Abilities: CharacterScreen
+    Abilities: CharacterScreen,
 }, {
     initialRouteName: "Character",
     lazy: false,
@@ -59,7 +60,8 @@ const profileStack = createMaterialTopTabNavigator({
 export default AppNav = createAppContainer(createStackNavigator({
     Main: MainScreen,
     Inventory: InventoryScreen,
-    Profile: profileStack
+    Profile: profileStack,
+    Menu: MenuScreen
 }, {
     initialRouteName: "Main",
     headerMode: "none",

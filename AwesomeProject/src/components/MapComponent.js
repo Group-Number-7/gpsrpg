@@ -4,12 +4,12 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 import MapStyle from '../assets/mapStyle.json'
 
-import { useStateValue } from '../context/Context';
+import useGlobalState from '../globalState'
 
 export default MapComponent = (({children, onReady}) => {
 
     const mapRef = useRef();
-    const [{pos},] = useStateValue();
+    const [{pos},] = useGlobalState();
     const [camera, setCamera] = useState()
 
     useEffect(()=>{

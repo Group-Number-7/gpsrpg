@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import Geolocation from 'react-native-geolocation-service';
 import { View, Text } from 'react-native'
 
+import useGlobalState from '../globalState'
 import AppNav from '../navigation/AppNav'
-import { useStateValue } from '../context/Context'
 import auth from '@react-native-firebase/auth'
 
-export default ({navigation}) => {
-    const [{loggedIn},dispatch] = useStateValue()
+export default AppContainer = React.memo(({navigation}) => {
+    const [{loggedIn}, actions] = useGlobalState()
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
         var watch = Geolocation.watchPosition(
             ({coords})=>{
-                dispatch({
-                    type:"pos",
-                    value:coords
-                })
+                actions.setPos(coords)
                 if(!ready)
                     setReady(true);
             },
@@ -41,4 +38,4 @@ export default ({navigation}) => {
         <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
             <Text>getting location data</Text>
         </View>
-}
+}, [])

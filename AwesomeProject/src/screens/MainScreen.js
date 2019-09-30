@@ -10,14 +10,15 @@ import TouchableImage from '../components/TouchableImage';
 import constants from '../config/constants';
 import ProgressBar from '../components/ProgressBar';
 
-import {useStateValue} from '../context/Context';
+import useGlobalState from '../globalState';
+
 import Images from '../assets/images'
 
 export default MainScreen = ({navigation}) => {
     const [enemies, setEnemies] = useState([]);
     const savedEnemies = useRef([])
     const [ready, setReady] = useState(false);
-    const [{pos, userName, stats, currentStats, level, exp, expToNextLevel}, dispatch] = useStateValue();
+    const [{pos, userName, stats, currentStats, exp, expToNextLevel, level}, actions] = useGlobalState();
 
     const getEnemies = () => {
         if(ready){
@@ -41,6 +42,10 @@ export default MainScreen = ({navigation}) => {
     useEffect(()=>{
         getEnemies()
     },[pos, ready])
+
+    useEffect(()=>{
+        console.log("testing renders on mainscreen")
+    })
 
     const HeaderInfo = () => {
         return(
@@ -88,7 +93,7 @@ export default MainScreen = ({navigation}) => {
             <HeaderInfo />
             <View style={styles.bottomMenu}>
                     <TouchableImage src={Images.inventory} style={{height: 80, width: "30%"}} onPress={()=>navigation.navigate("Inventory")}/>
-                    <TouchableImage src={Images.hamburger} style={{height: 50, width: "30%"}} imgStyle={{tintColor: "rgba(1,1,1,.7)"}} onPress={()=>navigation.navigate("Inventory")}/>
+                    <TouchableImage src={Images.hamburger} style={{height: 50, width: "30%"}} imgStyle={{tintColor: "rgba(1,1,1,.7)"}} onPress={()=>navigation.navigate("Menu")}/>
             </View>
         </View>
     )

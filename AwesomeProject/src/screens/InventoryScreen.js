@@ -3,10 +3,9 @@ import {View, Text, Dimensions, TouchableOpacity, StyleSheet, TextInput, Keyboar
 import Axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import constants from '../config/constants';
-import {useStateValue } from '../context/Context';
+
 
 export default  InventoryScreen = ({navigation}) => {
-    const [,dispatch] = useStateValue();
     const [filter, setFilter] = useState("")
     const [showFilterMenu, setFilterMenu] = useState(false);
     const [selected, setSelected] = useState({

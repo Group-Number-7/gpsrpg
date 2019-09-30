@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity, TextInput } from 'react-native'
-import { useStateValue } from '../context/Context'
+import useGlobalState from '../globalState'
 
 import auth from '@react-native-firebase/auth';
 
 export default LoginScreen = ({navigation}) => {
 
-    const [,dispatch] = useStateValue();
+    const [,actions] = useGlobalState();
     const [email, setEmail] = useState("")
     const [pass, setPass] = useState("")
     const [err, setErr] = useState("")
@@ -14,7 +14,8 @@ export default LoginScreen = ({navigation}) => {
     useEffect(() => {
         const onAuthStateChanged = (user) => {
             if(user){
-                dispatch({type: "login"})
+                console.log("user", user);
+                actions.login({email: user._user.email, fbUid: user._user.uid})
                 navigation.navigate("Landing")
             }
         }
@@ -26,7 +27,7 @@ export default LoginScreen = ({navigation}) => {
         if(email.length && pass.length){
             auth().signInWithEmailAndPassword(email.trim(), pass).then((user)=>{
                 if(user){
-                    dispatch({type: "login"})
+                    actions.login()
                     navigation.navigate("Landing")
                 }
             }).catch((err)=>{
