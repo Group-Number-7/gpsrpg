@@ -37,7 +37,7 @@ const profileStack = createMaterialTopTabNavigator({
     Abilities: CharacterScreen,
 }, {
     initialRouteName: "Character",
-    lazy: false,
+    lazy: true,
     tabBarOptions: {
         activeTintColor: "red",
         inactiveTintColor: "rgba(255,255,200,1)",

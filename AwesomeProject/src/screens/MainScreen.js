@@ -18,7 +18,7 @@ export default MainScreen = ({navigation}) => {
     const [enemies, setEnemies] = useState([]);
     const savedEnemies = useRef([])
     const [ready, setReady] = useState(false);
-    const [{pos, userName, stats, currentStats, exp, expToNextLevel, level}, actions] = useGlobalState();
+    const [{pos, username, stats, currentStats, exp, expToNextLevel, level}, actions] = useGlobalState();
 
     const getEnemies = () => {
         if(ready){
@@ -52,8 +52,8 @@ export default MainScreen = ({navigation}) => {
             <View style={styles.headerContainer}>
                 <View style={styles.topContainer}>
                     <TouchableOpacity style={styles.charContainer} onPress={()=>navigation.navigate("Profile")}>
-                        <Text style={{flex: .25, width: "100%", textAlign: "center"}} numberOfLines={1}>{userName}</Text>
-                        <FastImage source={Images.man} style={{flex: .75, width: 50, margin: 10}} resizeMode="center"/>
+                        <Text style={{flex: .25, width: "100%", textAlign: "center"}} numberOfLines={1}>{username.toUpperCase()}</Text>
+                        <FastImage source={{uri: 'man'}} style={{flex: .75, width: 50, margin: 10}} resizeMode="center"/>
                     </TouchableOpacity>
                     <View style={{flex: 4, padding: 5, height: "100%", justifyContent: "flex-end"}}>
                         <Text style={{width: "100%", textAlign: "center", flex: 1, fontSize: 18}}>Level {level}</Text>
