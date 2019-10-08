@@ -30,7 +30,7 @@ const initialState = {
     expToNextLevel: 0,
     loggedIn: false,
     username: "",
-    equipment: [{}],
+    equippedEquipment: [{}],
     userId: ""
 }
  
@@ -46,6 +46,7 @@ const actions = {
       Axios.get(`${constants.server_add}/users/login/${email}`)
         .then(({data})=>{
             if(data.status === 1){
+                console.log("tes", data.user.equipment);
                 store.setState({                    
                     ...store, 
                     loggedIn: true, 
@@ -54,7 +55,7 @@ const actions = {
                     exp: data.user.experience,
                     stats: data.user.stats,
                     currentStats: data.user.stats, 
-                    equipment: data.user.equipment,
+                    equippedEquipment: data.user.equipment,
                     userId: data.user._id
                 })
                 nav()
@@ -92,11 +93,6 @@ const actions = {
         Axios.post(`${constants.server_add}/equipment/new`, {
             name: name,
             userId: store.state.userId
-        }).then(({data})=>{
-            store.setState({
-                ...store,
-                equipment: data
-            })
         }).catch((err)=>{
             console.log("err adding item", err)
         })
@@ -107,7 +103,6 @@ const actions = {
             level: store.state.level + 1
         })
     }
-
 };
- 
+
 export default useGlobalState = useGlobalHook(React, initialState, actions);

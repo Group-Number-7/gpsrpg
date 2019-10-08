@@ -8,21 +8,17 @@ export default ItemFinder = ({items, close}) => {
     const ITEM_HEIGHT = 80;
 
     useEffect(()=>{
-        items.sort((a, b) => {
-            var suma = 0, sumb = 0
-            if(a.calcStats && b.calcStats){
-                for(i in a.calcStats){
-                    suma += a.calcStats[i]
-                }
-                for(i in b.calcStats){
-                    sumb += b.calcStats[i]
-                }
-            } else {
-                console.log("a", a, "b", b)
-            }
-            return suma < sumb ? 1 : -1;
-        })
-        setSortedItems(items)
+        // items.sort((a, b) => {
+        //     var suma = 0, sumb = 0
+        //         for(i in a.calcStats){
+        //             suma += a.calcStats[i]
+        //         }
+        //         for(i in b.calcStats){
+        //             sumb += b.calcStats[i]
+        //         }
+        //     return suma < sumb ? 1 : -1;
+        // })
+        // setSortedItems(items)
     }, [items])
 
     const renderItem = ({item}) => {
@@ -50,7 +46,7 @@ export default ItemFinder = ({items, close}) => {
     return(
         <View style={{flex: 1, width: "100%", backgroundColor: "white", justifyContent: "center", alignItems: "center", padding: 10}}>
             <FlatList
-                data={sortedItems}
+                data={items}
                 renderItem={renderItem}
                 keyExtractor={(item, index)=> item.id + String(index)}
                 style={{flex: 1, width: "100%", margin: 5}}
@@ -60,6 +56,7 @@ export default ItemFinder = ({items, close}) => {
                     {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
                   )}
                 ItemSeparatorComponent={()=><View style={{height: 10, width: "100%",marginBottom: 5, borderBottomColor: "black", borderBottomWidth: 1}}></View>}
+                initialNumToRender={5}
             />
             <View style={{height: 100, width: "100%", justifyContent: "center", alignItems: "center", padding: 15, borderTopColor: "black", borderTopWidth: 2}}>
                 <TouchableOpacity onPress={close} style={{height: 75, width: 75, justifyContent: "center", alignItems: "center", borderWidth: 2, borderColor: "black", borderRadius: 38}}>
