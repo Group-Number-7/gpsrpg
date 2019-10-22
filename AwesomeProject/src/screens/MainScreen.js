@@ -11,6 +11,7 @@ import constants from '../config/constants';
 import ProgressBar from '../components/ProgressBar';
 
 import useGlobalState from '../globalState';
+import useInterval from '../hooks/useInterval';
 
 import Images from '../assets/images'
 
@@ -18,14 +19,14 @@ export default MainScreen = ({navigation}) => {
     const [enemies, setEnemies] = useState([]);
     const savedEnemies = useRef([])
     const [ready, setReady] = useState(false);
-    const [{pos, username, stats, currentStats, exp, expToNextLevel, level}, actions] = useGlobalState();
+    const [freshEnemies, refreshEnemies] = useState(false);
+    useInterval(()=>refreshEnemies(!freshEnemies), 10000)
+    const [{pos, username, calcStats, currentStats, exp, expToNextLevel, level}, actions] = useGlobalState();
 
     const getEnemies = () => {
         if(ready){
-            console.log("getting enemies")
             Axios.get(`${constants.server_add}/location/enemies/${pos.latitude}/${pos.longitude}/${10}`)
             .then(({data})=>{
-                console.log("new enemies: ", enemies)
                 setEnemies([
                     ...data
                 ])
@@ -39,13 +40,10 @@ export default MainScreen = ({navigation}) => {
         else getEnemies()
         return () => savedEnemies.current = enemies
     }, [])
-    useEffect(()=>{
-        getEnemies()
-    },[pos, ready])
 
     useEffect(()=>{
-        console.log("testing renders on mainscreen")
-    })
+        getEnemies()
+    },[pos, ready, freshEnemies])
 
     const HeaderInfo = () => {
         return(
@@ -58,13 +56,13 @@ export default MainScreen = ({navigation}) => {
                     <View style={{flex: 4, padding: 5, height: "100%", justifyContent: "flex-end"}}>
                         <Text style={{width: "100%", textAlign: "center", flex: 1, fontSize: 18}}>Level {level}</Text>
                         <View style={styles.barContainer}>
-                            <ProgressBar containerStyle={{height: 25, width: "100%"}} curr={currentStats.hp} max={stats.hp} color="rgba(255,0,0,.8)">
-                                <Text style={{color: "black"}}>{currentStats.hp}/{stats.hp} hp</Text>
+                            <ProgressBar containerStyle={{height: 25, width: "100%"}} curr={currentStats.hp} max={calcStats.hp} color="rgba(255,0,0,.8)">
+                                <Text style={{color: "black"}}>{currentStats.hp}/{calcStats.hp} hp</Text>
                             </ProgressBar>
                         </View>
                         <View style={styles.barContainer}>
-                            <ProgressBar containerStyle={{height: 25, width: "100%"}} curr={currentStats.mana} max={stats.mana} color="rgba(50,50,255,.8)">
-                                <Text style={{color: "black"}}>{currentStats.mana}/{stats.mana} mana</Text>
+                            <ProgressBar containerStyle={{height: 25, width: "100%"}} curr={currentStats.mana} max={calcStats.mana} color="rgba(50,50,255,.8)">
+                                <Text style={{color: "black"}}>{currentStats.mana}/{calcStats.mana} mana</Text>
                             </ProgressBar>
                         </View>
                     </View>

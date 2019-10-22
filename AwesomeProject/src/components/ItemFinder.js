@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity, FlatList } from 'react-native'
 import FastImage from 'react-native-fast-image'
+import useGlobalState from '../globalState'
 
-export default ItemFinder = ({items, close}) => {
-    const [sortedItems, setSortedItems] = useState([])
-    const [pressed, setPressed] = useState()
+export default ItemFinder = ({items, close, equipped, setEq}) => {
+    const [listItems, setItems] = useState([]);
+    const [ready, setReady] = useState(false);
+    const [,actions] = useGlobalState();
     const ITEM_HEIGHT = 80;
 
     useEffect(()=>{
-        // items.sort((a, b) => {
-        //     var suma = 0, sumb = 0
-        //         for(i in a.calcStats){
-        //             suma += a.calcStats[i]
-        //         }
-        //         for(i in b.calcStats){
-        //             sumb += b.calcStats[i]
-        //         }
-        //     return suma < sumb ? 1 : -1;
-        // })
-        // setSortedItems(items)
-    }, [items])
-
+        setItems(items.sort((a, b) => {
+            return a.totalStats < b.totalStats ? 1 : -1
+        }))
+        setReady(true)
+    },[])
+    
+    const handlePress = (item) => {
+        setEq(item)
+        actions.equip(item._id, item.type)
+        close();
+    }
+ 
     const renderItem = ({item}) => {
         return(
             <View style={{height: ITEM_HEIGHT, flex: 1, borderColor: "black", borderWidth: 2, borderRadius: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-around", padding: 5}}>
-                <TouchableOpacity onPress={()=>setPressed(item)} style={{flex: 1.5, height: "100%", justifyContent: "center", alignItems: "center", margin: 3}}>
+                <TouchableOpacity onPress={()=>handlePress(item)} style={{flex: 1.5, height: "100%", justifyContent: "center", alignItems: "center", margin: 3}}>
                     <FastImage style={{height: "70%", width: "100%"}} resizeMode="center" source={{uri: "https://spng.pngfind.com/pngs/s/23-238265_minecraft-sword-png-minecraft-epic-diamond-sword-transparent.png"}}/>
                     <Text>{item.name}</Text>
                 </TouchableOpacity>
@@ -43,10 +44,10 @@ export default ItemFinder = ({items, close}) => {
             </View>
         )
     }
-    return(
+    return ready && (
         <View style={{flex: 1, width: "100%", backgroundColor: "white", justifyContent: "center", alignItems: "center", padding: 10}}>
             <FlatList
-                data={items}
+                data={listItems}
                 renderItem={renderItem}
                 keyExtractor={(item, index)=> item.id + String(index)}
                 style={{flex: 1, width: "100%", margin: 5}}
@@ -55,7 +56,7 @@ export default ItemFinder = ({items, close}) => {
                 getItemLayout={(data, index) => (
                     {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
                   )}
-                ItemSeparatorComponent={()=><View style={{height: 10, width: "100%",marginBottom: 5, borderBottomColor: "black", borderBottomWidth: 1}}></View>}
+                ItemSeparatorComponent={()=><View style={{height: 15, width: "100%"}}></View>}
                 initialNumToRender={5}
             />
             <View style={{height: 100, width: "100%", justifyContent: "center", alignItems: "center", padding: 15, borderTopColor: "black", borderTopWidth: 2}}>

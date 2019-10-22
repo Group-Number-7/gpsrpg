@@ -11,7 +11,7 @@ export default LandingScreen = ({navigation}) => {
         const onAuthStateChanged = (user) => {
             if(user && !found){
                 found = true
-                actions.login({email: user._user.email, nav: ()=>navigation.navigate("App")})
+                actions.login({email: user._user.email, cb: ()=> navigation.navigate("App")})
             }
         }
         const timeout = setTimeout(()=>{if(!loggedIn) navigation.navigate("Auth")}, 2000);

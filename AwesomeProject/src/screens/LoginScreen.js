@@ -16,7 +16,8 @@ export default LoginScreen = ({navigation}) => {
             console.log(email, pass, "test")
             auth().signInWithEmailAndPassword(email.trim(), pass).then((user)=>{
                 if(user){
-                    actions.login({email: email, nav: ()=> navigation.navigate("App")})   
+                    setErr("");
+                    actions.login({email: email, cb: (err)=> err ? setErr(err) : navigation.navigate("App")})   
                 }
             }).catch((err)=>{
                 switch(err.code){
@@ -50,7 +51,7 @@ export default LoginScreen = ({navigation}) => {
         <Text style={{width: "100%", textAlign: "center", color: "red"}}>{err}</Text>
         <TextInput value={email} onChangeText={(e)=>setEmail(e)}
             style={{backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"}}/>
-        <TextInput value={pass} onChangeText={(e)=>setPass(e)}
+        <TextInput value={pass} secureTextEntry={true} onChangeText={(e)=>setPass(e)}
             style={{backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"}}/>
         <TouchableOpacity onPress={handlePress} style={{height: 100, width: "80%", justifyContent: "center", alignItems: "center", backgroundColor: "grey"}}>
             <Text>Login</Text>

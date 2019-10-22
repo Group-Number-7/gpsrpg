@@ -8,9 +8,8 @@ import constants from '../config/constants';
 
 export default CharacterScreen = ({navigation}) => {
     const [selectedType, setSelectedType] = useState("")
-    const [newItem, setNewItem] = useState("")
     const [modalShow, setModalShow] = useState(false)
-    const [{userId, equippedEquipment}, actions] = useGlobalState()
+    const [{userId, equippedEquipment, stats, calcStats}, actions] = useGlobalState()
     const [Equipment, setEquipment] = useState([])
     const [itemsByType, setItemsByType] = useState()
     const [equipped, setEquipped] = useState()
@@ -22,6 +21,7 @@ export default CharacterScreen = ({navigation}) => {
         })
     }, [])
 
+
     const selectItemsByType = () => {
         setItemsByType(Equipment.filter((eq, index) => {
             return eq.type === selectedType
@@ -29,11 +29,13 @@ export default CharacterScreen = ({navigation}) => {
         setModalShow(true)
     }
 
-    const getEquipped = (type) => {
+    const handlePress = (type) => {
+        if(type === selectedType){
+            setSelectedType("")
+            return
+        }
         setSelectedType(type)
-        setEquipped(equippedEquipment.find((eq, i)=>{
-            return eq.type === type
-        }))
+        setEquipped(equippedEquipment[type])
     }
 
     const itemDisplay = (name) => {
@@ -55,20 +57,52 @@ export default CharacterScreen = ({navigation}) => {
             </>
         )
     }
+
+    const StatView = () => {
+        return (
+            <View style={{flex: 1, height: "100%", width: "100%", padding: 10}}>
+                <View style={{flex: .5, width: "100%", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", borderBottomColor: "black", borderBottomWidth: 1}}>
+                    <Text style={{fontSize: 16, flex: 1, minWidth: "9%"}}>Stat</Text>
+                    <Text style={{flex: 1, textAlign: "center"}}> = </Text>
+                    <Text style={{flex: 1}}>Base</Text> 
+                    <Text style={{flex: 1, textAlign: "center"}}> + </Text>
+                    <Text style={{flex: 1, minWidth: "9%"}}>Equipment</Text> 
+                    <Text style={{flex: 1, textAlign: "center"}}> = </Text> 
+                    <Text style={{flex: 1}}>Total</Text>
+                </View>
+                {
+                    Object.keys(stats).map((stat, i) => {
+                        let eq_stat = Object.keys(equippedEquipment).reduce((prev, curr, i)=>{return prev + equippedEquipment[curr].calcStats[stat]}, 0)
+                        return (
+                            <View style={{flex: 1, width: "100%", flexDirection: "row", justifyContent: "space-between", alignItems: "center"}} key={`${stat}${i}`}>
+                                <Text style={{fontSize: 16, flex: 1, minWidth: "9%"}}>{stat.toUpperCase()}</Text>
+                                <Text style={{flex: 1, textAlign: "center"}}> = </Text>
+                                <Text style={{flex: 1}}>{stats[stat]}</Text> 
+                                <Text style={{flex: 1, textAlign: "center"}}> + </Text>
+                                <Text style={{flex: 1, minWidth: "9%"}}> {eq_stat}</Text> 
+                                <Text style={{flex: 1, textAlign: "center"}}> = </Text> 
+                                <Text style={{flex: 1}}>{calcStats[stat]}</Text>
+                            </View>
+                        )
+                    })
+                }
+            </View>
+            )
+    }
     return(
         <View style={styles.container}>
             <Modal visible={modalShow} presentationStyle="overFullScreen" onDismiss={()=>setModalShow(false)}>
-                {itemsByType && <ItemFinder items={itemsByType} close={()=>setModalShow(false)}/> }
+                {itemsByType && <ItemFinder items={itemsByType} close={()=>setModalShow(false)} equipped={equipped} setEq={setEquipped}/> }
             </Modal>
             <View style={{flex: 1.5, width: "100%", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
                 <View style={{flex: 1, height: "80%", borderColor: "black", borderWidth: 2, borderBottomWidth: 0}}>
-                    <TouchableOpacity onPress={()=>getEquipped("weapon")} style={styles.menuItem}>
+                    <TouchableOpacity onPress={() => handlePress("weapon")} style={styles.menuItem}>
                         <Text>weapon</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>getEquipped("offhand")} style={styles.menuItem}>
+                    <TouchableOpacity onPress={()=>handlePress("offhand")} style={styles.menuItem}>
                         <Text>offhand</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>getEquipped("jewelry")} style={styles.menuItem}>
+                    <TouchableOpacity onPress={()=>handlePress("jewelry")} style={styles.menuItem}>
                         <Text>jewelry</Text>
                     </TouchableOpacity>
                 </View>
@@ -76,16 +110,16 @@ export default CharacterScreen = ({navigation}) => {
                     <Image source={Images.man} resizeMode="center" style={{width: "70%", height: "100%"}} />
                 </View>
                 <View style={{flex: 1, height: "100%", borderColor: "black", borderWidth: 2, borderTopWidth: 0, borderBottomWidth: 0}}>
-                    <TouchableOpacity onPress={()=>getEquipped("head")} style={styles.menuItem}>
+                    <TouchableOpacity onPress={()=>handlePress("head")} style={styles.menuItem}>
                         <Text>head</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>getEquipped("chest")} style={styles.menuItem}>
+                    <TouchableOpacity onPress={()=>handlePress("chest")} style={styles.menuItem}>
                         <Text>chest</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>getEquipped("legs")} style={styles.menuItem}>
+                    <TouchableOpacity onPress={()=>handlePress("legs")} style={styles.menuItem}>
                         <Text>legs</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>getEquipped("feet")} style={[styles.menuItem, { borderBottomWidth: 0}]}>
+                    <TouchableOpacity onPress={()=>handlePress("feet")} style={[styles.menuItem, { borderBottomWidth: 0}]}>
                         <Text>feet</Text>
                     </TouchableOpacity>
                 </View>
@@ -93,23 +127,21 @@ export default CharacterScreen = ({navigation}) => {
             <View style={{flex: 1, width: "100%", borderTopWidth: 2, borderTopColor: "black", flexDirection: "row"}}>
                 {selectedType ? <>
                     <View style={{flex: 1, height: "100%", justifyContent: "center", alignItems: "center", borderColor: "black", borderRightWidth: 2}}>
-                        { itemDisplay(selectedType) }
+                        { equipped ? 
+                            itemDisplay(selectedType) 
+                            :
+                            <View style={{flex: 1, height: "100%", justifyContent: "center", alignItems: "center"}}>
+                                <Text>No {selectedType} equipped</Text>
+                            </View>
+                        }
                     </View>
                     <View style={{flex: 1, height: "100%", justifyContent: "center", alignItems: "center"}}>
-                        { newItem ? <>
-                            {itemDisplay(selectedType)}</>
-                                :
-                            <TouchableOpacity onPress={selectItemsByType} style={{height: 100, width: "70%", borderColor: "black", borderWidth: 1, borderRadius: 10, justifyContent: "center", alignItems: "center"}}>
-                                <Text>Change</Text>
-                            </TouchableOpacity>
-                        }
+                        <TouchableOpacity onPress={selectItemsByType} style={{height: 100, width: "70%", borderColor: "black", borderWidth: 1, borderRadius: 10, justifyContent: "center", alignItems: "center"}}>
+                            <Text>Change</Text>
+                        </TouchableOpacity>
                     </View></>
                         :
-                    <View style={{flex: 1, height: "100%", width: "100%"}}>
-                            <TouchableOpacity onPress={selectItemsByType} style={{height: 100, width: "70%", borderColor: "black", borderWidth: 1, borderRadius: 10, justifyContent: "center", alignItems: "center"}}>
-                                <Text>Equip Item</Text>
-                            </TouchableOpacity>
-                    </View>
+                    <StatView />
                 }
             </View>
         </View>
