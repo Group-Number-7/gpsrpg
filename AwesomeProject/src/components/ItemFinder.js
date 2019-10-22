@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, FlatList } from 'react-native'
+import { View, Text, TouchableOpacity, FlatList, SafeAreaView } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import useGlobalState from '../globalState'
 
@@ -26,7 +26,7 @@ export default ItemFinder = ({items, close, equipped, setEq}) => {
         return(
             <View style={{height: ITEM_HEIGHT, flex: 1, borderColor: "black", borderWidth: 2, borderRadius: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-around", padding: 5}}>
                 <TouchableOpacity onPress={()=>handlePress(item)} style={{flex: 1.5, height: "100%", justifyContent: "center", alignItems: "center", margin: 3}}>
-                    <FastImage style={{height: "70%", width: "100%"}} resizeMode="center" source={{uri: "https://spng.pngfind.com/pngs/s/23-238265_minecraft-sword-png-minecraft-epic-diamond-sword-transparent.png"}}/>
+                    <FastImage style={{height: "70%", width: "100%"}} resizeMode="contain" source={{uri: "https://spng.pngfind.com/pngs/s/23-238265_minecraft-sword-png-minecraft-epic-diamond-sword-transparent.png"}}/>
                     <Text>{item.name}</Text>
                 </TouchableOpacity>
                 <View style={{flex: 1, height: "100%", justifyContent: "space-around", alignItems: "stretch", margin: 3}}>
@@ -45,7 +45,7 @@ export default ItemFinder = ({items, close, equipped, setEq}) => {
         )
     }
     return ready && (
-        <View style={{flex: 1, width: "100%", backgroundColor: "white", justifyContent: "center", alignItems: "center", padding: 10}}>
+        <SafeAreaView style={{flex: 1, width: "100%", backgroundColor: "white", justifyContent: "center", alignItems: "center", padding: 10}}>
             <FlatList
                 data={listItems}
                 renderItem={renderItem}
@@ -65,6 +65,6 @@ export default ItemFinder = ({items, close, equipped, setEq}) => {
                 </TouchableOpacity>
             </View>
 
-        </View>
+        </SafeAreaView>
     )
 }

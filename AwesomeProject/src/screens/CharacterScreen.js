@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, Modal } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList } from 'react-native'
 import Axios from 'axios'
 import Images from '../assets/images';
 import useGlobalState from '../globalState'
@@ -45,15 +45,19 @@ export default CharacterScreen = ({navigation}) => {
             <View style={{flex: 1, width: "100%", padding: 20}}>
                 <Image source={image} style={{flex: 1, width: "100%", borderColor: "black", borderWidth: 1, borderRadius: 10}} />
             </View>
-            <View style={{flex: 1, width: "90%", borderColor: "black", borderTopWidth: 1, padding: 10, flexDirection: "row", flexWrap: "wrap"}}>
-                {
-                    Object.keys(equipped.calcStats).map((stat, index)=>{
-                        return(
-                            <Text style={{width: "50%"}}key={index}>{stat}: {equipped.calcStats[stat]}</Text>
-                        )
-                    })
+            <FlatList style={{flex: 1, width: "90%", borderColor: "black", borderTopWidth: 1, padding: 10}}
+                data={                    
+                    Object.keys(equipped.calcStats).map((stat, index)=> stat)
                 }
-            </View>
+                renderItem={({item})=>(
+                    <View style={{width: "100%", height: 20, borderBottomColor: "black", borderBottomWidth: 1, marginBottom: 5}}>
+                        <Text style={{flex: 1, width: "100%", color: "black", fontSize: 16}}>{item}: {equipped.calcStats[item]}</Text>
+                    </View>
+                    )
+                }
+                keyExtractor={(item)=>item}
+                showsVerticalScrollIndicator={false}
+            />
             </>
         )
     }
@@ -95,14 +99,17 @@ export default CharacterScreen = ({navigation}) => {
                 {itemsByType && <ItemFinder items={itemsByType} close={()=>setModalShow(false)} equipped={equipped} setEq={setEquipped}/> }
             </Modal>
             <View style={{flex: 1.5, width: "100%", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
-                <View style={{flex: 1, height: "80%", borderColor: "black", borderWidth: 2, borderBottomWidth: 0}}>
+                <View style={{flex: 1, height: "100%", borderColor: "black", borderWidth: 2, borderBottomWidth: 0}}>
+                    <TouchableOpacity onPress={() => navigation.navigate("Main")} style={styles.menuItem}>
+                        <Text>{"<--"}</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => handlePress("weapon")} style={styles.menuItem}>
                         <Text>weapon</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={()=>handlePress("offhand")} style={styles.menuItem}>
                         <Text>offhand</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>handlePress("jewelry")} style={styles.menuItem}>
+                    <TouchableOpacity onPress={()=>handlePress("jewelry")} style={[styles.menuItem, {borderBottomWidth: 0}]}>
                         <Text>jewelry</Text>
                     </TouchableOpacity>
                 </View>
