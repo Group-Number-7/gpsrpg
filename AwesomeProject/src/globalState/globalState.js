@@ -17,6 +17,14 @@ const initialState = {
         res: 0,
         attack: 0
     },
+    calcStats: {
+        hp: 0,
+        def: 0,
+        mana: 0,
+        magic: 0,
+        res: 0,
+        attack: 0  
+    },
     currentStats: {
         hp: 0,
         def: 0,
@@ -42,11 +50,17 @@ const actions = {
       auth().signOut()
       store.setState(initialState)
   },
-  login: (store, {email, nav}) => {
+  login: (store, {email, cb}) => {
       Axios.get(`${constants.server_add}/users/login/${email}`)
         .then(({data})=>{
             if(data.status === 1){
-                console.log("tes", data.user.equipment);
+                const equipped = Object.assign({}, ...data.user.equipment.map((eq)=>{
+                    return ({[eq.type]:eq})
+                }));
+                let calcStats = {}
+                Object.keys(store.state.stats).map((stat, i) => {
+                    calcStats[stat] = data.user.stats[stat] + Object.keys(equipped).reduce((prev, curr, i)=>{return prev + equipped[curr].calcStats[stat]}, 0)
+                })
                 store.setState({                    
                     ...store, 
                     loggedIn: true, 
@@ -55,14 +69,18 @@ const actions = {
                     exp: data.user.experience,
                     stats: data.user.stats,
                     currentStats: data.user.stats, 
-                    equippedEquipment: data.user.equipment,
+                    equippedEquipment: equipped,
+                    calcStats: calcStats,
                     userId: data.user._id
                 })
-                nav()
+                cb();
             } else{
                 //TODO show error message, pop up or something
-                console.log("check internet connection")
+                cb("Error retrieving user info")
             }
+        }).catch((err)=>{
+            console.log("err", err.message);
+            cb("Unable to connect to Server")
         })
   },
   signup: (store, {email, username, nav}) => {
@@ -71,6 +89,13 @@ const actions = {
           username: username
       }).then(({data})=> {
           if(data.status === 1){
+                const equipped = Object.assign({}, ...data.user.equipment.map((eq)=>{
+                    return ({[eq.type]:eq})
+                }));
+                let calcStats = {}
+                Object.keys(store.state.stats).map((stat, i) => {
+                    calcStats[stat] = data.user.stats[stat] + Object.keys(equipped).reduce((prev, curr, i)=>{return prev + equipped[curr].calcStats[stat]}, 0)
+                })
                 store.setState({
                     ...store, 
                     loggedIn: true, 
@@ -79,7 +104,8 @@ const actions = {
                     exp: data.user.experience,
                     stats: data.user.stats,
                     currentStats: data.user.stats,
-                    equipment: data.user.equipment,
+                    equippedEquipment: equipped,
+                    calcStats: calcStats,
                     userId: data.user._id
                 })
                 nav()
@@ -95,6 +121,24 @@ const actions = {
             userId: store.state.userId
         }).catch((err)=>{
             console.log("err adding item", err)
+        })
+    },
+    equip: (store, eqId, type) => {
+        Axios.put(`${constants.server_add}/equipment/equip/${store.state.userId}/${eqId}/${type}`).then(({data})=>{
+            console.log("res", data)
+            let equipped = {
+                ...store.state.equippedEquipment,
+                [type]: data
+            }
+            let calcStats = {}
+            Object.keys(store.state.stats).map((stat, i) => {
+                calcStats[stat] = store.state.stats[stat] + Object.keys(equipped).reduce((prev, curr, i)=>{return prev + equipped[curr].calcStats[stat]}, 0)
+            })
+            store.setState({
+                ...store,
+                equippedEquipment: equipped,
+                calcStats: calcStats
+            })
         })
     },
     levelUp: (store) => {
