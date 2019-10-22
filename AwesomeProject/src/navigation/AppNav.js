@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
-import { createMaterialTopTabNavigator, TabView } from 'react-navigation-tabs';
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import {Animated, Easing} from 'react-native'
 
 import CustomTabBar from './CustomTabBar'
@@ -10,6 +10,8 @@ import InventoryScreen from '../screens/InventoryScreen'
 import MainScreen from '../screens/MainScreen'
 import CharacterScreen from '../screens/CharacterScreen'
 import MenuScreen from '../screens/MenuScreen'
+
+import Screen from '../components/Screen'
 
 const transitionConfig = () => {
     return {
@@ -58,10 +60,28 @@ const profileStack = createMaterialTopTabNavigator({
 })
 
 export default AppNav = createAppContainer(createStackNavigator({
-    Main: MainScreen,
-    Inventory: InventoryScreen,
+    Main: {
+        screen: (props)=>(
+            <Screen>
+                <MainScreen {...props}/>
+            </Screen>
+        )
+    },
+    Inventory: {
+        screen: (props) => {
+            <Screen>
+                <InventoryScreen {...props}/>
+            </Screen>
+        }
+    },
     Profile: profileStack,
-    Menu: MenuScreen
+    Menu: {
+        screen: (props) => (
+            <Screen>
+                <MenuScreen {...props}/>
+            </Screen>
+        )
+    }
 }, {
     initialRouteName: "Main",
     headerMode: "none",

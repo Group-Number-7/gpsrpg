@@ -8,24 +8,24 @@ export default ItemFinder = ({items, close}) => {
     const ITEM_HEIGHT = 80;
 
     useEffect(()=>{
-        // items.sort((a, b) => {
-        //     var suma = 0, sumb = 0
-        //         for(i in a.calcStats){
-        //             suma += a.calcStats[i]
-        //         }
-        //         for(i in b.calcStats){
-        //             sumb += b.calcStats[i]
-        //         }
-        //     return suma < sumb ? 1 : -1;
-        // })
-        // setSortedItems(items)
+        items.sort((a, b) => {
+            var suma = 0, sumb = 0
+                for(i in a.calcStats){
+                    suma += a.calcStats[i]
+                }
+                for(i in b.calcStats){
+                    sumb += b.calcStats[i]
+                }
+            return suma < sumb ? 1 : -1;
+        })
+        setSortedItems(items)
     }, [items])
 
     const renderItem = ({item}) => {
         return(
             <View style={{height: ITEM_HEIGHT, flex: 1, borderColor: "black", borderWidth: 2, borderRadius: 5, flexDirection: "row", alignItems: "center", justifyContent: "space-around", padding: 5}}>
                 <TouchableOpacity onPress={()=>setPressed(item)} style={{flex: 1.5, height: "100%", justifyContent: "center", alignItems: "center", margin: 3}}>
-                    <FastImage style={{height: "70%", width: "100%"}} resizeMode="center" source={{uri: "https://spng.pngfind.com/pngs/s/23-238265_minecraft-sword-png-minecraft-epic-diamond-sword-transparent.png"}}/>
+                    <FastImage style={{height: "70%", width: "100%"}} resizeMode="contain" source={{uri: "https://spng.pngfind.com/pngs/s/23-238265_minecraft-sword-png-minecraft-epic-diamond-sword-transparent.png"}}/>
                     <Text>{item.name}</Text>
                 </TouchableOpacity>
                 <View style={{flex: 1, height: "100%", justifyContent: "space-around", alignItems: "stretch", margin: 3}}>
@@ -46,7 +46,7 @@ export default ItemFinder = ({items, close}) => {
     return(
         <View style={{flex: 1, width: "100%", backgroundColor: "white", justifyContent: "center", alignItems: "center", padding: 10}}>
             <FlatList
-                data={items}
+                data={sortedItems}
                 renderItem={renderItem}
                 keyExtractor={(item, index)=> item.id + String(index)}
                 style={{flex: 1, width: "100%", margin: 5}}
