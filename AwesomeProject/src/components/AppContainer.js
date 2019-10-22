@@ -32,7 +32,7 @@ export default AppContainer = React.memo(({navigation}) => {
     }
 
     useEffect(() => {
-        if(Platform.OS === "android") reqPerm()
+        Platform.OS === "android" ? reqPerm() : setGranted(true)
         return () => Geolocation.clearWatch(watchRef.current)
     }, [])
 

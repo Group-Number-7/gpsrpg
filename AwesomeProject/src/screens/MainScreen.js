@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import Axios from 'axios';
 import FastImage from 'react-native-fast-image'
 
@@ -53,7 +53,7 @@ export default MainScreen = ({navigation}) => {
                 <View style={styles.topContainer}>
                     <TouchableOpacity style={styles.charContainer} onPress={()=>navigation.navigate("Profile")}>
                         <Text style={{flex: .25, width: "100%", textAlign: "center"}} numberOfLines={1}>{username.toUpperCase()}</Text>
-                        <FastImage source={{uri: 'man'}} style={{flex: .75, width: 50, margin: 10}} resizeMode="center"/>
+                        <FastImage source={{uri: 'man'}} style={{height: "100%", width: 50, margin: 10}} resizeMode="contain"/>
                     </TouchableOpacity>
                     <View style={{flex: 4, padding: 5, height: "100%", justifyContent: "flex-end"}}>
                         <Text style={{width: "100%", textAlign: "center", flex: 1, fontSize: 18}}>Level {level}</Text>
@@ -92,8 +92,8 @@ export default MainScreen = ({navigation}) => {
             }   
             <HeaderInfo />
             <View style={styles.bottomMenu}>
-                    <TouchableImage src={Images.inventory} style={{height: 80, width: "30%"}} onPress={()=>navigation.navigate("Inventory")}/>
-                    <TouchableImage src={Images.hamburger} style={{height: 50, width: "30%"}} imgStyle={{tintColor: "rgba(1,1,1,.7)"}} onPress={()=>navigation.navigate("Menu")}/>
+                    <TouchableImage src={Images.inventory} style={{height: 80, width: "30%"}} resizeMode={"contain"} onPress={()=>navigation.navigate("Inventory")}/>
+                    <TouchableImage src={Images.hamburger} style={{height: 50, width: "30%"}} resizeMode={"contain"} imgStyle={{tintColor: "rgba(1,1,1,.7)"}} onPress={()=>navigation.navigate("Menu")}/>
             </View>
         </View>
     )
