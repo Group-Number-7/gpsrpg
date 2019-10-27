@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
 import useGlobalState from '../globalState'
 
 import auth from '@react-native-firebase/auth';
@@ -40,18 +40,30 @@ export default SignupScreen = ({navigation}) => {
   }
 
   return (
-    <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-        <Text style={{width: "100%", textAlign: "center", color: "red"}}>{err}</Text>
+    <View style={styles.container}>
+        <View style = {styles.textInputCont}>
+        <Text style={styles.userText}>{err}</Text>
         <TextInput value={username} placeholder="username" onChangeText={(e)=>setUsername(e)}
-            style={{backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"}}/>
+            style={styles.userName}/>
         <TextInput value={email} placeholder="email" onChangeText={(e)=>setEmail(e)}
-            style={{backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"}}/>
+            style={styles.userEmail}/>
         <TextInput value={pass} placeholder="password" onChangeText={(e)=>setPass(e)}
-            style={{backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"}}/>
-        <TouchableOpacity onPress={handlePress} style={{height: 100, width: "80%", justifyContent: "center", alignItems: "center", backgroundColor: "grey"}}>
+            style={styles.userPass}/>
+        <TouchableOpacity onPress={handlePress} style={styles.signIn}>
             <Text>Signup</Text>
         </TouchableOpacity>
-      <Text>logging in...</Text>
+        </View>
     </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+    container: {flex: 1},
+    textInputCont: {flex: 1, justifyContent: "center", alignItems: "center"},
+    userText: {width: "100%", textAlign: "center", color: "black"},
+    userName: {backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"},
+    userEmail: {backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"},
+    userPass: {backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"},
+    signIn: {height: 100, width: "80%", justifyContent: "center", alignItems: "center", backgroundColor: "grey"}  
+});
