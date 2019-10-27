@@ -50,13 +50,17 @@ export default LoginScreen = ({navigation}) => {
         <View style= {styles.container}>
             <Text style={styles.welcome}>GPSRPG</Text>
             <TextInput
+                value={email} 
+                onChangeText={(e)=>setEmail(e)}
                 style={styles.input}
                 placeholder="Username"
             />
             <TextInput
+                value={pass} 
+                secureTextEntry={true} 
+                onChangeText={(e)=>setPass(e)}
                 style={styles.input}
-                placeholder="Password"
-                secureTextEntry
+                placeholder="Password"  
             />
             <View style={styles.btnContainer}>
                 <TouchableOpacity
