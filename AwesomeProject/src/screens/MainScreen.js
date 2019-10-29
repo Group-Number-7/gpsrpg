@@ -4,7 +4,8 @@ import Axios from 'axios';
 import FastImage from 'react-native-fast-image'
 
 import MapComponent from '../components/MapComponent';
-import CustomMarker from '../components/CustomMarker';
+import EnemyMarker from '../components/EnemyMarker';
+import UserMarker from '../components/UserMarker';
 
 import TouchableImage from '../components/TouchableImage';
 import constants from '../config/constants';
@@ -14,12 +15,15 @@ import useGlobalState from '../globalState';
 import useInterval from '../hooks/useInterval';
 
 import Images from '../assets/images'
+import ConfirmAttackModal from '../components/ConfirmAttackModal';
 
 export default MainScreen = ({navigation}) => {
     const [enemies, setEnemies] = useState([]);
     const savedEnemies = useRef([])
     const [ready, setReady] = useState(false);
     const [freshEnemies, refreshEnemies] = useState(false);
+    const [confirmAttack, setConfirmAttack] = useState(false);
+
     useInterval(()=>refreshEnemies(!freshEnemies), 10000)
     const [{pos, username, calcStats, currentStats, exp, expToNextLevel, level}, actions] = useGlobalState();
 
@@ -78,14 +82,15 @@ export default MainScreen = ({navigation}) => {
 
     return(
         <View style={styles.mainView}>
+            <ConfirmAttackModal show={confirmAttack} close={()=>setConfirmAttack(false)}/>
             {
                 <MapComponent onReady={()=>{setReady(true); console.log("raedy")}}>
                     {
                         enemies.map((enemy)=>{
-                            return <CustomMarker coord={enemy.location} key={enemy.location.latitude * enemy.location.longitude}/>
+                            return <EnemyMarker coord={enemy.location} key={enemy.location.latitude * enemy.location.longitude} press={()=>setConfirmAttack(true)}/>
                         })
                     }
-                    {pos && <CustomMarker coord={{latitude: pos.latitude, longitude: pos.longitude}} source={Images.man} /> }
+                    {pos && <UserMarker coord={{latitude: pos.latitude, longitude: pos.longitude}} source={Images.man} /> }
                 </MapComponent>
             }   
             <HeaderInfo />
