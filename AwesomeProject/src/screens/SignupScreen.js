@@ -41,29 +41,43 @@ export default SignupScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-        <View style = {styles.textInputCont}>
-        <Text style={styles.userText}>{err}</Text>
-        <TextInput value={username} placeholder="username" onChangeText={(e)=>setUsername(e)}
-            style={styles.userName}/>
-        <TextInput value={email} placeholder="email" onChangeText={(e)=>setEmail(e)}
-            style={styles.userEmail}/>
-        <TextInput value={pass} placeholder="password" onChangeText={(e)=>setPass(e)}
-            style={styles.userPass}/>
-        <TouchableOpacity onPress={handlePress} style={styles.signIn}>
-            <Text>Signup</Text>
-        </TouchableOpacity>
-        </View>
+        <Text style={styles.welcome}>{err}</Text>
+        <TextInput 
+            value={username} 
+            placeholder="username" 
+            onChangeText={(e)=>setUsername(e)}
+            style={styles.input}
+            
+        />
+        <TextInput 
+            value={email} 
+            placeholder="email" 
+            onChangeText={(e)=>setEmail(e)}
+            style={styles.input}
+        />
+        <TextInput 
+            value={pass} 
+            placeholder="password" 
+            onChangeText={(e)=>setPass(e)}
+            style={styles.input}    
+        />
+
+        <TouchableOpacity 
+               onPress={handlePress} 
+               style={styles.userBtn}>
+                
+                 <Text style={styles.btnTxt}>Create</Text>
+         </TouchableOpacity>
     </View>
   );
 }
 
 
 const styles = StyleSheet.create({
-    container: {flex: 1},
-    textInputCont: {flex: 1, justifyContent: "center", alignItems: "center"},
-    userText: {width: "100%", textAlign: "center", color: "black"},
-    userName: {backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"},
-    userEmail: {backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"},
-    userPass: {backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"},
-    signIn: {height: 100, width: "80%", justifyContent: "center", alignItems: "center", backgroundColor: "grey"}  
+	container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#05ffb0"},
+	welcome: { fontSize: 30, textAlign: 'center', margin: 10, color: "red", fontFamily: "DancingScript-Bold"},
+	input:{ width: '90%', backgroundColor: "#fff", padding: 15, marginBottom: 10},
+	//btnContainer:{alignItems: 'center', justifyContent: "center", width : '100%'},
+	userBtn:{ backgroundColor: "#ffd700",padding: 10,   width: '90%'},
+	btnTxt:{ fontSize: 18, textAlign: 'center', justifyContent: 'center'}
 });
