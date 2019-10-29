@@ -1,11 +1,9 @@
 import React from 'react'
-import { View, SafeAreaView, Text, TouchableOpacity, Modal, Image, Dimensions } from 'react-native'
+import { View, SafeAreaView, Text, TouchableOpacity, Modal, Image, Dimensions, StyleSheet } from 'react-native'
 
 import Images from '../assets/images'
 
-const { height, width } = Dimensions.get("screen")
-
-export default function ConfirmAttackModal({ show, close }){
+export default function ConfirmAttackModal({ show, close, enemy, navigation }){
 
     return (
         <Modal
@@ -13,14 +11,35 @@ export default function ConfirmAttackModal({ show, close }){
             presentationStyle="overFullScreen"
             transparent={true}
         >
-            <SafeAreaView style={{flex: 1, backgroundColor: "rgba(1,1,1,.1)", justifyContent: "center", alignItems: "center", padding: 20, borderColor: "red", borderWidth: 2}}>
-                <View style={{flex: 1, width: "80%", borderWidth: 2, borderColor: "black", borderRadius: 20, padding: 20}}>
-                    <Image source={Images.enemy} style={{height: "100%", width: "100%"}}/>
+            <SafeAreaView style={{flex: 1, backgroundColor: "rgba(1,1,1,.5)", justifyContent: "center", alignItems: "center", padding: 20}}>
+                <View style={{flex: .5, width: "100%", padding: 20, justifyContent: "center", alignItems: "center"}}>
+                    <View style={{height: "80%", width: "70%", justifyContent: "center", alignItems: "center"}}>
+                        <Image source={Images.enemy} style={{height: "80%", width: "80%"}} resizeMode="contain"/>
+                    </View>
                 </View>
-                <TouchableOpacity onPress={close} style={{flex: 1, width: "100%", justifyContent: "center", alignItems: "center"}}>
-                    <Text>Run</Text>
-                </TouchableOpacity>
+                <View style={{flex: 1, width: "100%", justifyContent: "space-between", alignItems: "center"}}>
+                    { enemy &&
+                        <Text style={{color: "white", margin: 3, height: 50}}>{enemy.name}</Text>
+                    }
+                    { enemy &&
+                        Object.keys(enemy.stats).map((stat)=>{
+                            return <Text key={stat} style={{textAlign: "left", color: "white", margin: 3}}>{stat}: {enemy.stats[stat]}</Text>
+                        })
+                    }
+                    <View style={{flex: 1.5, paddingBottom: 50, width: "100%", flexDirection: "row", alignItems: "center"}}>
+                        <TouchableOpacity onPress={close} style={styles.button}>
+                            <Text style={{color: "black"}}>Attack</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={close} style={styles.button}>
+                            <Text style={{color: "black"}}>Run</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </SafeAreaView>
         </Modal>
     )
 }
+
+const styles=StyleSheet.create({
+    button: {flex: 1, height: 50, margin: 20, justifyContent: "center", alignItems: "center", backgroundColor: "white", borderRadius: 10}
+})

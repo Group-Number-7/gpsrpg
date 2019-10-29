@@ -23,8 +23,9 @@ export default MainScreen = ({navigation}) => {
     const [ready, setReady] = useState(false);
     const [freshEnemies, refreshEnemies] = useState(false);
     const [confirmAttack, setConfirmAttack] = useState(false);
+    const [fighting, setFighting] = useState();
 
-    useInterval(()=>refreshEnemies(!freshEnemies), 10000)
+    useInterval(()=>refreshEnemies(!freshEnemies), 60000)
     const [{pos, username, calcStats, currentStats, exp, expToNextLevel, level}, actions] = useGlobalState();
 
     const getEnemies = () => {
@@ -82,12 +83,12 @@ export default MainScreen = ({navigation}) => {
 
     return(
         <View style={styles.mainView}>
-            <ConfirmAttackModal show={confirmAttack} close={()=>setConfirmAttack(false)}/>
+            <ConfirmAttackModal show={confirmAttack} close={()=>setConfirmAttack(false)} enemy={fighting} navigation={navigation}/>
             {
                 <MapComponent onReady={()=>{setReady(true); console.log("raedy")}}>
                     {
                         enemies.map((enemy)=>{
-                            return <EnemyMarker coord={enemy.location} key={enemy.location.latitude * enemy.location.longitude} press={()=>setConfirmAttack(true)}/>
+                            return <EnemyMarker coord={enemy.location} key={enemy.location.latitude * enemy.location.longitude} press={()=>{ setConfirmAttack(true); setFighting(enemy) }}/>
                         })
                     }
                     {pos && <UserMarker coord={{latitude: pos.latitude, longitude: pos.longitude}} source={Images.man} /> }
