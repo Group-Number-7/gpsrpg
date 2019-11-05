@@ -12,6 +12,7 @@ export default LoginScreen = ({navigation}) => {
     const [err, setErr] = useState("")
 
     const handlePress = () => {
+        
         if(email.length && pass.length){
             console.log(email, pass, "test")
             auth().signInWithEmailAndPassword(email.trim(), pass).then((user)=>{
@@ -53,7 +54,7 @@ export default LoginScreen = ({navigation}) => {
                 value={email} 
                 onChangeText={(e)=>setEmail(e)}
                 style={styles.input}
-                placeholder="Username"
+                placeholder="Email"
             />
             <TextInput
                 value={pass} 

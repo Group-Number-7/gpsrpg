@@ -58,6 +58,7 @@ export default SignupScreen = ({navigation}) => {
         <TextInput 
             value={pass} 
             placeholder="password" 
+            secureTextEntry={true}
             onChangeText={(e)=>setPass(e)}
             style={styles.input}    
         />
