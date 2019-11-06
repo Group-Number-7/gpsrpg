@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
 import useGlobalState from '../globalState'
 
 import auth from '@react-native-firebase/auth';
@@ -40,18 +40,45 @@ export default SignupScreen = ({navigation}) => {
   }
 
   return (
-    <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-        <Text style={{width: "100%", textAlign: "center", color: "red"}}>{err}</Text>
-        <TextInput value={username} placeholder="username" onChangeText={(e)=>setUsername(e)}
-            style={{backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"}}/>
-        <TextInput value={email} placeholder="email" onChangeText={(e)=>setEmail(e)}
-            style={{backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"}}/>
-        <TextInput value={pass} placeholder="password" onChangeText={(e)=>setPass(e)}
-            style={{backgroundColor: "grey", borderWidth: 2, borderColor: "black", width: "80%"}}/>
-        <TouchableOpacity onPress={handlePress} style={{height: 100, width: "80%", justifyContent: "center", alignItems: "center", backgroundColor: "grey"}}>
-            <Text>Signup</Text>
-        </TouchableOpacity>
-      <Text>logging in...</Text>
+    <View style={styles.container}>
+        <Text style={styles.welcome}>{err}</Text>
+        <TextInput 
+            value={username} 
+            placeholder="username" 
+            onChangeText={(e)=>setUsername(e)}
+            style={styles.input}
+            
+        />
+        <TextInput 
+            value={email} 
+            placeholder="email" 
+            onChangeText={(e)=>setEmail(e)}
+            style={styles.input}
+        />
+        <TextInput 
+            value={pass} 
+            placeholder="password" 
+            secureTextEntry={true}
+            onChangeText={(e)=>setPass(e)}
+            style={styles.input}    
+        />
+
+        <TouchableOpacity 
+               onPress={handlePress} 
+               style={styles.userBtn}>
+                
+                 <Text style={styles.btnTxt}>Create</Text>
+         </TouchableOpacity>
     </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+	container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#05ffb0"},
+	welcome: { fontSize: 30, textAlign: 'center', margin: 10, color: "red", fontFamily: "DancingScript-Bold"},
+	input:{ width: '90%', backgroundColor: "#fff", padding: 15, marginBottom: 10},
+	//btnContainer:{alignItems: 'center', justifyContent: "center", width : '100%'},
+	userBtn:{ backgroundColor: "#ffd700",padding: 10,   width: '90%'},
+	btnTxt:{ fontSize: 18, textAlign: 'center', justifyContent: 'center'}
+});
