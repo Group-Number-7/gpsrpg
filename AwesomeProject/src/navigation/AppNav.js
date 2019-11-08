@@ -12,6 +12,7 @@ import CharacterScreen from '../screens/CharacterScreen'
 import MenuScreen from '../screens/MenuScreen'
 
 import Screen from '../components/Screen'
+import AttackScreen from '../screens/AttackScreen';
 
 const transitionConfig = () => {
     return {
@@ -79,6 +80,13 @@ export default AppNav = createAppContainer(createStackNavigator({
         screen: (props) => (
             <Screen>
                 <MenuScreen {...props}/>
+            </Screen>
+        )
+    },
+    Attack: {
+        screen: (props) =>(
+            <Screen>
+                <AttackScreen {...props}/>
             </Screen>
         )
     }

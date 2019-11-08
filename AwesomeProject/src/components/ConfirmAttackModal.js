@@ -27,7 +27,7 @@ export default function ConfirmAttackModal({ show, close, enemy, navigation }){
                         })
                     }
                     <View style={{flex: 1.5, paddingBottom: 50, width: "100%", flexDirection: "row", alignItems: "center"}}>
-                        <TouchableOpacity onPress={close} style={styles.button}>
+                        <TouchableOpacity onPress={()=>{ close(); navigation.navigate("Attack",{enemy: enemy}) }} style={styles.button}>
                             <Text style={{color: "black"}}>Attack</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={close} style={styles.button}>
