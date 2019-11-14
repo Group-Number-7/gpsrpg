@@ -27,11 +27,11 @@ export default  InventoryScreen = ({navigation}) => {
     const enemy = require("../assets/images/enemy.png");
 
     useEffect(()=>{
-        setLoaded(true)
         var d = data
         if(d.length % 3 >= 1) d.push(0)
         if(d.length % 3 >= 1) d.push(0)
         setData(d);
+        setLoaded(true)
     }, [])
 
     const renderItem = ({ item }) => {

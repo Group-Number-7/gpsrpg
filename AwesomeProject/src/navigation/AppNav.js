@@ -68,11 +68,11 @@ export default AppNav = createAppContainer(createStackNavigator({
         )
     },
     Inventory: {
-        screen: (props) => {
+        screen: (props) => (
             <Screen>
                 <InventoryScreen {...props}/>
             </Screen>
-        }
+        )
     },
     Profile: profileStack,
     Menu: {
