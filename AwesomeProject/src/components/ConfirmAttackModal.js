@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, SafeAreaView, Text, TouchableOpacity, Modal, Image, Dimensions, StyleSheet } from 'react-native'
+import { View, SafeAreaView, Text, TouchableOpacity, Modal, Image, StyleSheet } from 'react-native'
 
 import Images from '../assets/images'
 
@@ -11,7 +11,7 @@ export default function ConfirmAttackModal({ show, close, enemy, navigation }){
             presentationStyle="overFullScreen"
             transparent={true}
         >
-            <SafeAreaView style={{flex: 1, backgroundColor: "rgba(1,1,1,.5)", justifyContent: "center", alignItems: "center", padding: 20}}>
+            <SafeAreaView style={{flex: 1, backgroundColor: "rgba(1,1,1,.7)", justifyContent: "center", alignItems: "center", padding: 20}}>
                 <View style={{flex: .5, width: "100%", padding: 20, justifyContent: "center", alignItems: "center"}}>
                     <View style={{height: "80%", width: "70%", justifyContent: "center", alignItems: "center"}}>
                         <Image source={Images.enemy} style={{height: "80%", width: "80%"}} resizeMode="contain"/>
@@ -27,7 +27,7 @@ export default function ConfirmAttackModal({ show, close, enemy, navigation }){
                         })
                     }
                     <View style={{flex: 1.5, paddingBottom: 50, width: "100%", flexDirection: "row", alignItems: "center"}}>
-                        <TouchableOpacity onPress={close} style={styles.button}>
+                        <TouchableOpacity onPress={()=> {close(); navigation.navigate("Attack", {enemy: enemy})}} style={styles.button}>
                             <Text style={{color: "black"}}>Attack</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={close} style={styles.button}>

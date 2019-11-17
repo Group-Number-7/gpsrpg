@@ -45,8 +45,8 @@ export default AppContainer = React.memo(({navigation}) => {
                         setReady(true);
                 },
                 (err)=>{
-                    console.log(err.message)
-                }, { enableHighAccuracy: true, maximumAge:1000, distanceFilter: 5, timeout:500, interval:500, fastestInterval:500 }
+                    console.log("loc err", err.code , err.message)
+                }, { enableHighAccuracy: true, maximumAge:1000, distanceFilter: 5, timeout:500, interval:500, fastestInterval:500, skipPermissionRequests: true }
             )
         }
     },[granted])

@@ -68,7 +68,7 @@ const actions = {
                     level: data.user.level,
                     exp: data.user.experience,
                     stats: data.user.stats,
-                    currentStats: data.user.stats, 
+                    currentStats: calcStats, 
                     equippedEquipment: equipped,
                     calcStats: calcStats,
                     userId: data.user._id
@@ -103,7 +103,7 @@ const actions = {
                     level: data.user.level,
                     exp: data.user.experience,
                     stats: data.user.stats,
-                    currentStats: data.user.stats,
+                    currentStats: calcStats,
                     equippedEquipment: equipped,
                     calcStats: calcStats,
                     userId: data.user._id
@@ -137,6 +137,7 @@ const actions = {
             store.setState({
                 ...store,
                 equippedEquipment: equipped,
+                currentStats: calcStats,
                 calcStats: calcStats
             })
         })
@@ -145,6 +146,21 @@ const actions = {
         store.setState({
             ...store,
             level: store.state.level + 1
+        })
+    },
+    setHP: (store, newLife) => {
+        store.setState({
+            ...store,
+            currentStats: {
+                ...store.state.currentStats,
+                hp: newLife
+            }
+        })
+    },
+    resetStats: (store) => {
+        store.setState({
+            ...store,
+            currentStats: store.state.calcStats
         })
     }
 };

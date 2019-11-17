@@ -10,6 +10,7 @@ import InventoryScreen from '../screens/InventoryScreen'
 import MainScreen from '../screens/MainScreen'
 import CharacterScreen from '../screens/CharacterScreen'
 import MenuScreen from '../screens/MenuScreen'
+import AttackScreen from '../screens/AttackScreen'
 
 import Screen from '../components/Screen'
 
@@ -79,6 +80,13 @@ export default AppNav = createAppContainer(createStackNavigator({
         screen: (props) => (
             <Screen>
                 <MenuScreen {...props}/>
+            </Screen>
+        )
+    },
+    Attack: {
+        screen: (props) => (
+            <Screen>
+                <AttackScreen {...props}/>
             </Screen>
         )
     }
