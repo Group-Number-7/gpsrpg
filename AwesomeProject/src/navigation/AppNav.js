@@ -10,6 +10,7 @@ import InventoryScreen from '../screens/InventoryScreen'
 import MainScreen from '../screens/MainScreen'
 import CharacterScreen from '../screens/CharacterScreen'
 import MenuScreen from '../screens/MenuScreen'
+import AbilitiesScreen from '../screens/AbilitiesScreen'
 
 import Screen from '../components/Screen'
 
@@ -36,7 +37,7 @@ const transitionConfig = () => {
 const profileStack = createMaterialTopTabNavigator({
     Character: CharacterScreen,
     Stats: InventoryScreen,
-    Abilities: CharacterScreen,
+    Abilities: AbilitiesScreen,
 }, {
     initialRouteName: "Character",
     lazy: true,
