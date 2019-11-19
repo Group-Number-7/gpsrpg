@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import Images from '../assets/images'
 import ProgressBar from '../components/ProgressBar'
@@ -9,14 +9,6 @@ export default function AttackScreen({navigation}){
     const [{username, calcStats, currentStats}, actions] = useGlobalState();
     const enemy = useState(navigation.getParam('enemy'))[0];
     const [enemyStats, setEnemyStats] = useState(enemy.stats)
-
-    useEffect(()=>{
-        console.log("en", enemy);
-    },[enemy])
-
-    useEffect(()=>{
-        console.log("enemy stats", enemyStats)
-    },[enemyStats])
 
     const attack = ()=>{
         let atk = currentStats.attack - enemyStats.def
