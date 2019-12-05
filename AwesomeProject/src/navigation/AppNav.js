@@ -11,8 +11,9 @@ import MainScreen from '../screens/MainScreen'
 import CharacterScreen from '../screens/CharacterScreen'
 import MenuScreen from '../screens/MenuScreen'
 import AttackScreen from '../screens/AttackScreen'
-
 import Screen from '../components/Screen'
+import AudioMenu from '../screens/AudioMenu'
+
 
 const transitionConfig = () => {
     return {
@@ -22,7 +23,7 @@ const transitionConfig = () => {
             timing: Animated.timing,
             useNativeDriver: true,
         },
-        screenInterpolator: sceneProps => {      
+        screenInterpolator: sceneProps => {
         const { position, scene } = sceneProps
         const thisSceneIndex = scene.index
         const fade = position.interpolate({
@@ -61,6 +62,14 @@ const profileStack = createMaterialTopTabNavigator({
 })
 
 export default AppNav = createAppContainer(createStackNavigator({
+
+    Audio: {
+        screen: (props)=>(
+            <Screen>
+                <AudioMenu {...props}/>
+            </Screen>
+        )
+    },
     Main: {
         screen: (props)=>(
             <Screen>
@@ -69,11 +78,11 @@ export default AppNav = createAppContainer(createStackNavigator({
         )
     },
     Inventory: {
-        screen: (props) => (
+        screen: (props) => {
             <Screen>
                 <InventoryScreen {...props}/>
             </Screen>
-        )
+        }
     },
     Profile: profileStack,
     Menu: {
@@ -90,6 +99,7 @@ export default AppNav = createAppContainer(createStackNavigator({
             </Screen>
         )
     }
+
 }, {
     initialRouteName: "Main",
     headerMode: "none",
