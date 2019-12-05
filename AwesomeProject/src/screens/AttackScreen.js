@@ -3,30 +3,40 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import Images from '../assets/images'
 import ProgressBar from '../components/ProgressBar'
 import useGlobalState from '../globalState'
+import Axios from 'axios'
+import constants from '../config/constants'
 
 export default function AttackScreen({navigation}){
 
-    const [{username, calcStats, currentStats}, actions] = useGlobalState();
+    const [{username, calcStats, currentStats, userId}, actions] = useGlobalState();
     const enemy = useState(navigation.getParam('enemy'))[0];
     const [enemyStats, setEnemyStats] = useState(enemy.stats)
 
-    const attack = ()=>{
+    const attack = async () => {
         let atk = currentStats.attack - enemyStats.def
-        let newLife = enemyStats.hp - (atk > 0 ? atk : 0) 
+        let newLife = enemyStats.hp - (atk > 0 ? atk : 0)
         if(newLife <= 0){
             setEnemyStats({...enemyStats, hp: 0})
+            try {
+                const { data } = await Axios.get(`${constants.server_add}/battle/kill/${enemy._id}`)
+                if(data.exp){
+                    actions.addExp(data.exp)
+                }
+            } catch(err){
+                console.log('err', err)
+            }
             setTimeout(()=>{
-                navigation.navigate("Main")
+                navigation.navigate("Main", {"win": enemy._id})
             },200)
         } else {
             setEnemyStats({
                 ...enemyStats, hp: newLife
             })
-            enemyAttack();
+            enemyAttack()
         }
     }
 
-    const enemyAttack = () => {
+    const enemyAttack = async () => {
         let atk = enemyStats.attack - currentStats.def
         let newLife = currentStats.hp - (atk > 0 ? atk : 0)
         if(newLife <= 0){

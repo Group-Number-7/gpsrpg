@@ -35,7 +35,7 @@ const initialState = {
     },
     level: 0,
     exp: 0,
-    expToNextLevel: 0,
+    expToNextLevel: 500,
     loggedIn: false,
     username: "",
     equippedEquipment: [{}],
@@ -142,11 +142,29 @@ const actions = {
             })
         })
     },
-    levelUp: (store) => {
-        store.setState({
-            ...store,
-            level: store.state.level + 1
-        })
+    addExp: async (store, amount) => {
+        let n_exp = store.state.exp + amount
+        if(n_exp < 500){
+            store.setState({
+                ...store,
+                exp: n_exp
+            })
+            await Axios.post(`${constants.server_add}/users/level/${store.state.userId}`, {
+                level: store.state.level,
+                exp: n_exp
+            })
+        } else {
+            let lvl = store.state.level
+            store.setState({
+                ...store,
+                exp: 0,
+                level: store.state.level + 1
+            })
+            await Axios.post(`${constants.server_add}/users/level/${store.state.userId}`, {
+                level: lvl + 1,
+                exp: 0
+            })
+        }
     },
     setHP: (store, newLife) => {
         store.setState({
