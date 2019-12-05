@@ -39,7 +39,8 @@ const initialState = {
     loggedIn: false,
     username: "",
     equippedEquipment: [{}],
-    userId: ""
+    userId: "",
+    inBattle: false
 }
  
 const actions = {
@@ -167,6 +168,7 @@ const actions = {
         }
     },
     setHP: (store, newLife) => {
+        console.log("test", newLife)
         store.setState({
             ...store,
             currentStats: {
@@ -179,6 +181,12 @@ const actions = {
         store.setState({
             ...store,
             currentStats: store.state.calcStats
+        })
+    },
+    setBattle: (store, value) => {
+        store.setState({
+            ...store,
+            inBattle: value
         })
     }
 };

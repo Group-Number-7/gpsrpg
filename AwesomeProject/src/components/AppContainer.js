@@ -4,12 +4,24 @@ import { View, Text, PermissionsAndroid } from 'react-native'
 
 import useGlobalState from '../globalState'
 import AppNav from '../navigation/AppNav'
+import useInterval from '../hooks/useInterval';
 
 export default AppContainer = React.memo(({navigation}) => {
-    const [{loggedIn}, actions] = useGlobalState()
+    const [{loggedIn, currentStats, calcStats, inBattle}, actions] = useGlobalState()
     const [granted, setGranted] = useState(false)
     const [ready, setReady] = useState(false);
     const watchRef = useRef();
+
+    useInterval(()=>{
+        if(!inBattle) {
+            let newLife = currentStats.hp + Math.ceil(currentStats.hp * .01)
+            if(newLife <= calcStats.hp){
+                actions.setHP(newLife)
+            } else {
+                actions.setHP(calcStats.hp)
+            }
+        }
+    }, 10000)
 
     const reqPerm = async () => {
         try {
