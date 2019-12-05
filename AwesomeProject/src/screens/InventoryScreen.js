@@ -19,11 +19,12 @@ export default  InventoryScreen = ({navigation}) => {
         'h': 'Head',
         'c': "Chest",
         'l': "Legs",
-        'f': "Feet"
+        'f': "Feet",
+        'i': 'Items'
     }
 
     const [loaded, setLoaded] = useState(false)
-    const [data, setData] = useState([1,2,3,5,6,7,8,9])
+    const [data, setData] = useState([1,2,3,4,5])
     const enemy = require("../assets/images/enemy.png");
 
     useEffect(()=>{
