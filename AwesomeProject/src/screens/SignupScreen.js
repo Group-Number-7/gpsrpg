@@ -76,7 +76,7 @@ export default SignupScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
 	container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#05ffb0"},
-	welcome: { fontSize: 30, textAlign: 'center', margin: 10, color: "red", fontFamily: "DancingScript-Bold"},
+	welcome: { fontSize: 30, textAlign: 'center', margin: 10, color: "red"},
 	input:{ width: '90%', backgroundColor: "#fff", padding: 15, marginBottom: 10},
 	//btnContainer:{alignItems: 'center', justifyContent: "center", width : '100%'},
 	userBtn:{ backgroundColor: "#ffd700",padding: 10,   width: '90%'},

@@ -35,7 +35,7 @@ const initialState = {
     },
     level: 0,
     exp: 0,
-    expToNextLevel: 0,
+    expToNextLevel: 500,
     loggedIn: false,
     username: "",
     equippedEquipment: [{}],
@@ -68,7 +68,7 @@ const actions = {
                     level: data.user.level,
                     exp: data.user.experience,
                     stats: data.user.stats,
-                    currentStats: data.user.stats, 
+                    currentStats: calcStats, 
                     equippedEquipment: equipped,
                     calcStats: calcStats,
                     userId: data.user._id
@@ -103,7 +103,7 @@ const actions = {
                     level: data.user.level,
                     exp: data.user.experience,
                     stats: data.user.stats,
-                    currentStats: data.user.stats,
+                    currentStats: calcStats,
                     equippedEquipment: equipped,
                     calcStats: calcStats,
                     userId: data.user._id
@@ -137,14 +137,48 @@ const actions = {
             store.setState({
                 ...store,
                 equippedEquipment: equipped,
+                currentStats: calcStats,
                 calcStats: calcStats
             })
         })
     },
-    levelUp: (store) => {
+    addExp: async (store, amount) => {
+        let n_exp = store.state.exp + amount
+        if(n_exp < 500){
+            store.setState({
+                ...store,
+                exp: n_exp
+            })
+            await Axios.post(`${constants.server_add}/users/level/${store.state.userId}`, {
+                level: store.state.level,
+                exp: n_exp
+            })
+        } else {
+            let lvl = store.state.level
+            store.setState({
+                ...store,
+                exp: 0,
+                level: store.state.level + 1
+            })
+            await Axios.post(`${constants.server_add}/users/level/${store.state.userId}`, {
+                level: lvl + 1,
+                exp: 0
+            })
+        }
+    },
+    setHP: (store, newLife) => {
         store.setState({
             ...store,
-            level: store.state.level + 1
+            currentStats: {
+                ...store.state.currentStats,
+                hp: newLife
+            }
+        })
+    },
+    resetStats: (store) => {
+        store.setState({
+            ...store,
+            currentStats: store.state.calcStats
         })
     }
 };

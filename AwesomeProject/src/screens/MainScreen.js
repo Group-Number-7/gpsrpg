@@ -47,6 +47,19 @@ export default MainScreen = ({navigation}) => {
     }, [])
 
     useEffect(()=>{
+        if(navigation.getParam("win")){
+            let defeated = navigation.getParam("win")
+            console.log("running", defeated)
+            setEnemies((prev)=>
+                prev.filter((en)=>
+                    en._id != defeated
+                )
+            )
+            getEnemies()
+        }
+    }, [navigation.getParam('win')])
+
+    useEffect(()=>{
         getEnemies()
     },[pos, ready, freshEnemies])
 
