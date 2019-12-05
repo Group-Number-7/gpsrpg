@@ -69,7 +69,7 @@ export default MainScreen = ({navigation}) => {
                 <View style={styles.topContainer}>
                     <TouchableOpacity style={styles.charContainer} onPress={()=>navigation.navigate("Profile")}>
                         <Text style={{flex: .25, width: "100%", textAlign: "center"}} numberOfLines={1}>{username.toUpperCase()}</Text>
-                        <FastImage source={Images.man} style={{height: "100%", width: 50, margin: 10}} resizeMode="contain"/>
+                        <FastImage source={Images.man} style={{flex: .75, width: 50, margin: 10}} resizeMode="contain"/>
                     </TouchableOpacity>
                     <View style={{flex: 4, padding: 5, height: "100%", justifyContent: "flex-end"}}>
                         <Text style={{width: "100%", textAlign: "center", flex: 1, fontSize: 18}}>Level {level}</Text>
