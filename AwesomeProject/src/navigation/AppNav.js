@@ -10,10 +10,9 @@ import InventoryScreen from '../screens/InventoryScreen'
 import MainScreen from '../screens/MainScreen'
 import CharacterScreen from '../screens/CharacterScreen'
 import MenuScreen from '../screens/MenuScreen'
-import AttackScreen from '../screens/AttackScreen'
-import Screen from '../components/Screen'
 import AudioMenu from '../screens/AudioMenu'
-
+import Gameplay from '../screens/GameplayScreen'
+import Screen from '../components/Screen'
 
 const transitionConfig = () => {
     return {
@@ -23,7 +22,7 @@ const transitionConfig = () => {
             timing: Animated.timing,
             useNativeDriver: true,
         },
-        screenInterpolator: sceneProps => {
+        screenInterpolator: sceneProps => {      
         const { position, scene } = sceneProps
         const thisSceneIndex = scene.index
         const fade = position.interpolate({
@@ -70,6 +69,15 @@ export default AppNav = createAppContainer(createStackNavigator({
             </Screen>
         )
     },
+
+    Game: {
+        screen: (props)=>(
+            <Screen>
+                <Gameplay {...props}/>
+            </Screen>
+        )
+    },
+
     Main: {
         screen: (props)=>(
             <Screen>
@@ -89,13 +97,6 @@ export default AppNav = createAppContainer(createStackNavigator({
         screen: (props) => (
             <Screen>
                 <MenuScreen {...props}/>
-            </Screen>
-        )
-    },
-    Attack: {
-        screen: (props) => (
-            <Screen>
-                <AttackScreen {...props}/>
             </Screen>
         )
     }
