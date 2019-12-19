@@ -1,3 +1,5 @@
+//  Copy File into ios/AwesomeProject
+
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
