@@ -49,9 +49,11 @@ export default AudioMenu = ({navigation}) => {
             <View style={styles.base}>
             </View>
 
-
+                    <Text style={styles.credits}> Credits </Text>
 
         </View>
+
+
 
 
 
@@ -76,6 +78,8 @@ const styles = StyleSheet.create({
     height: 500,
     justifyContent: 'center',
     padding: 0.0,
+    marginLeft: 10,
+    marginTop: 10
   },
 
   headerBox: {
@@ -101,8 +105,8 @@ const styles = StyleSheet.create({
   },
 
     base: {
-        //borderColor: Colors.black,
-        //borderWidth: 1,
+        borderColor: 'rgba(255,255,255,1)',
+        borderWidth: 1,
         flexDirection: 'row',
         marginTop: 0,
         height: 0,
@@ -131,7 +135,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 312,
     fontSize: 20,
-    //backgroundColor: 'rgba(170,220,156,2)',
+    backgroundColor: 'rgba(170,220,156,2)',
     //borderColor: Colors.black,
     borderWidth: 2.0,
   }
